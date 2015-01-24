@@ -7,7 +7,7 @@ import (
 )
 
 func prepareProxyClient() *http.Client {
-  	dialSocksProxy := socks.DialSocksProxy(socks.SOCKS5, "127.0.0.1:9150")
+  	dialSocksProxy := socks.DialSocksProxy(socks.SOCKS5, "127.0.0.1:9050")
   	transport := &http.Transport{Dial: dialSocksProxy}
   	return &http.Client{Transport: transport}
 }
