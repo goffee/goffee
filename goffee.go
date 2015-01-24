@@ -51,6 +51,7 @@ func main() {
 			fmt.Println(batch)
 			for _, item := range batch {
 				if item == "newip" {
+					wg.Wait()
 					newip()
 				} else {
 					wg.Add(1)
