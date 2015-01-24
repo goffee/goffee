@@ -30,13 +30,23 @@ type Result struct {
 	CheckId   int64
 }
 
+type User struct {
+	Id          int64
+	CreatedAt   time.Time
+	Name        string
+	Email       string
+	GitHubId    int64  `gorm:"column:github_id"`
+	GitHubLogin string `gorm:"column:github_login"`
+	OAuthToken  string `gorm:"column:oauth_token"`
+}
+
 func InitDatabase() (err error) {
 	db, err = gorm.Open("sqlite3", "/tmp/goffee.db")
 	if err != nil {
 		return err
 	}
 
-	db.AutoMigrate(&Check{}, &Result{})
+	db.AutoMigrate(&Check{}, &Result{}, &User{})
 
 	return nil
 }
@@ -78,4 +88,14 @@ func (c *Check) Results() ([]Result, error) {
 	var results []Result
 	res := db.Model(c).Related(&results)
 	return results, res.Error
+}
+
+func (u *User) UpdateOrCreate() error {
+	res := db.Where(User{GitHubId: u.GitHubId}).Assign(*u).FirstOrInit(u)
+	if res.Error != nil {
+		return res.Error
+	}
+
+	res = db.Save(u)
+	return res.Error
 }

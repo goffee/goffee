@@ -5,7 +5,9 @@ import (
 	"net/http"
 
 	"github.com/google/go-github/github"
-	"github.com/gophergala/goffee/web/render"
+	"github.com/gophergala/goffee/data"
+	"github.com/gorilla/sessions"
+	"github.com/zenazn/goji/web"
 	"golang.org/x/oauth2"
 	oauth2github "golang.org/x/oauth2/github"
 )
@@ -24,7 +26,7 @@ func OAuthAuthorize(w http.ResponseWriter, req *http.Request) {
 }
 
 // OAuthCallback handles the callback from GitHub
-func OAuthCallback(w http.ResponseWriter, req *http.Request) {
+func OAuthCallback(c web.C, w http.ResponseWriter, req *http.Request) {
 	// Get the code from the response
 	code := req.FormValue("code")
 
@@ -34,10 +36,27 @@ func OAuthCallback(w http.ResponseWriter, req *http.Request) {
 		log.Fatal(err)
 	}
 
+	session := c.Env["Session"].(*sessions.Session)
+
 	httpClient := conf.Client(oauth2.NoContext, token)
 	githubClient := github.NewClient(httpClient)
 	user, _, err := githubClient.Users.Get("")
 
-	render.JSON(w, http.StatusOK, user)
-	// fmt.Fprintf(w, "Token: %s!", user.String())
+	if err != nil {
+		session.AddFlash("Authentication failed")
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	u := &data.User{
+		Name:        *user.Name,
+		GitHubId:    int64(*user.ID),
+		GitHubLogin: *user.Login,
+		Email:       *user.Email,
+		OAuthToken:  token.AccessToken,
+	}
+	u.UpdateOrCreate()
+
+	session.Values["UserId"] = u.Id
+
+	http.Redirect(w, req, "/checks", http.StatusFound)
 }

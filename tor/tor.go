@@ -11,6 +11,10 @@ import (
 	"errors"
 )
 
+// Your torrc should have these lines
+// ControlPort 9051
+// HashedControlPassword 16:CB7707079B9712C860BB052D2D6A96323211DD16D50A170E6ADD10BEFD
+
 func prepareProxyClient() *http.Client {
   	dialSocksProxy := socks.DialSocksProxy(socks.SOCKS5, "127.0.0.1:9050")
   	transport := &http.Transport{Dial: dialSocksProxy}
