@@ -1,20 +1,33 @@
 {{define "body"}}
-<div class="checks-header">
-  <h1>
-    Check: {{.Check.URL}}
-    <span class="label label-success">up</span>
-  </h1>
-</div>
+  <div class="checks-header">
+    <h1>
+      Check <small>{{.Check.URL}}</small>
+    </h1>
+  </div>
 
-<div class="panel panel-success">
-  <div class="panel-heading">
-    <h3 class="panel-title">
-      <span class="badge">{{.Check.Status}}</span>
-      {{.Check.URL}}
-    </h3>
-  </div>
-  <div class="panel-body">
-    Last checked <time datetime="1996-12-19T16:39:57-08:00">1996-12-19T16:39:57-08:00</time>
-  </div>
-</div>
+  {{with .Check}}
+    <div class="panel {{if .Success}} panel-success {{else if lt .Status 100}} panel-warning {{else}} panel-danger {{end}}">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span class="badge">
+            {{if lt .Status 100}}
+            Error
+            {{else}}
+            {{.Status}}
+            {{end}}
+          </span>
+          {{.URL}}
+        </h3>
+      </div>
+      <div class="panel-body">
+        <p>
+          Last checked <time datetime="{{.UpdatedAt}}">{{.UpdatedAt}}</time>.&nbsp;
+          <a class="" href="/checks/{{.Id}}" role="button">
+            <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
+            View details
+          </a>
+        </p>
+      </div>
+    </div>
+  {{end}}
 {{end}}

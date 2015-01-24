@@ -15,14 +15,22 @@ import (
 
 // ChecksIndex render the checks index for the current user
 func ChecksIndex(c web.C, w http.ResponseWriter, req *http.Request) {
-	if !helpers.UserSignedIn(c) {
+	user, err := helpers.CurrentUser(c)
+
+	if err != nil {
 		http.Error(w, "You need to re-authenticate", http.StatusUnauthorized)
+		return
+	}
+
+	checks, err := user.Checks()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/checks.html")
-	err := render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "Checks"})
+	err = render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "Checks", "Checks": checks})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
