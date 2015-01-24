@@ -1,8 +1,9 @@
 package queue
 
 import (
-	"github.com/garyburd/redigo/redis"
 	"fmt"
+
+	"github.com/garyburd/redigo/redis"
 )
 
 var RedisAddressWithPort string
@@ -13,7 +14,7 @@ const timeout = 5
 func FetchBatch() (result []string) {
 	c, err := redis.Dial("tcp", RedisAddressWithPort)
 	if err != nil {
-	    panic(err)
+		panic(err)
 	}
 	defer c.Close()
 
@@ -25,16 +26,15 @@ func FetchBatch() (result []string) {
 		item := string(reply[1].([]byte))
 		result = append(result, item)
 	}
-	
+
 	return
 }
-
 
 func WriteResult(result string) {
 	fmt.Println("Writing result " + result)
 	c, err := redis.Dial("tcp", RedisAddressWithPort)
 	if err != nil {
-	    panic(err)
+		panic(err)
 	}
 	defer c.Close()
 
@@ -42,6 +42,6 @@ func WriteResult(result string) {
 	if err != nil {
 		// never mind
 	}
-	
+
 	return
 }
