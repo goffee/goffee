@@ -11,14 +11,14 @@ import (
 )
 
 var webMode bool
-var torFetch bool
+var probeMode bool
 var schedulerMode bool
 var writerMode bool
 var redisAddress string
 
 func init() {
 	flag.BoolVar(&webMode, "webmode", false, "Run goffee in webmode")
-	flag.BoolVar(&torFetch, "torfetch", false, "Fetch something via Tor")
+	flag.BoolVar(&probeMode, "torfetch", false, "Fetch something via Tor")
 	flag.BoolVar(&schedulerMode, "scheduler", false, "Run goffee scheduler")
 	flag.BoolVar(&writerMode, "writer", false, "Run goffee writer")
 	flag.StringVar(&redisAddress, "redisaddress", "", "Address of redis including port")
@@ -30,11 +30,11 @@ func main() {
 		web.StartServer()
 	}
 
-	if torFetch || schedulerMode || writerMode {
+	if probeMode || schedulerMode || writerMode {
 		queue.RedisAddressWithPort = redisAddress
 	}
 
-	if torFetch {
+	if probeMode {
 		probe.Run()
 	}
 	if schedulerMode {
@@ -53,7 +53,7 @@ func main() {
 	if schedulerMode {
 		scheduler.Wait()
 	}
-	if torFetch {
+	if probeMode {
 		probe.Wait()
 	}
 }
