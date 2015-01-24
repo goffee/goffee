@@ -19,10 +19,6 @@ func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
 		// existing session: Get() always returns a session, even if empty.
 		session, _ := store.Get(r, "goffee-session")
 
-		// Set some session values.
-		session.Values["foo"] = "bar"
-		session.Values[42] = 43
-
 		// Save it.
 		session.Save(r, w)
 
