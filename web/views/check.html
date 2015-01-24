@@ -25,7 +25,7 @@
       </div>
       <div class="panel-body">
         <p>
-          Last checked <time datetime="{{.UpdatedAt}}">{{.UpdatedAt}}</time>.&nbsp;
+          Last checked <time data-role="timeago" datetime="{{formatTime .UpdatedAt}}">{{formatTime .UpdatedAt}}</time>.&nbsp;
           <a class="" href="/checks/{{.Id}}" role="button">
             <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
             View details
@@ -34,4 +34,57 @@
       </div>
     </div>
   {{end}}
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Timestamp</th>
+        <th>Status</th>
+        <th>Success?</th>
+        <th>Tested from</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><time datetime="2015-01-23T23:50:27+00:00">2015-01-23T23:50:27+00:00</time></td>
+        <td>200</td>
+        <td><span class="glyphicon glyphicon-ok">&nbsp;OK</span></td>
+        <td>China</td>
+      </tr>
+      <tr>
+        <td><time datetime="2015-01-23T23:40:27+00:00">2015-01-23T23:50:27+00:00</time></td>
+        <td>200</td>
+        <td><span class="glyphicon glyphicon-ok">&nbsp;OK</span></td>
+        <td>China</td>
+      </tr>
+      <tr class="danger">
+        <td><time datetime="2015-01-23T23:30:27+00:00">2015-01-23T23:50:27+00:00</time></td>
+        <td>200</td>
+        <td><span class="glyphicon glyphicon-fire">&nbsp;Fail</span></td>
+        <td>China</td>
+      </tr>
+      <tr class="warning">
+        <td><time datetime="2015-01-23T22:50:27+00:00">2015-01-23T23:50:27+00:00</time></td>
+        <td>200</td>
+        <td><span class="glyphicon glyphicon-warning-sign">&nbsp;Warning</span></td>
+        <td>China</td>
+      </tr>
+      <tr>
+        <td><time datetime="2015-01-22T21:50:27+00:00">2015-01-23T23:50:27+00:00</time></td>
+        <td>200</td>
+        <td><span class="glyphicon glyphicon-ok">&nbsp;OK</span></td>
+        <td>China</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- type Result struct {
+    Id        int64
+    CreatedAt time.Time
+    Status    int
+    Success   bool
+    IP        string `gorm:"column:ip"`
+    CheckId   int64
+  } -->
+
+
 {{end}}
