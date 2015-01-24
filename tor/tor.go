@@ -10,16 +10,20 @@ import (
 	"strings"
 
 	"github.com/hailiang/gosocks"
+	"time"
 )
 
 // Your torrc should have these lines
 // ControlPort 9051
 // HashedControlPassword 16:CB7707079B9712C860BB052D2D6A96323211DD16D50A170E6ADD10BEFD
 
+const httpTimeout = 15
+
 func prepareProxyClient() *http.Client {
 	dialSocksProxy := socks.DialSocksProxy(socks.SOCKS5, "127.0.0.1:9050")
 	transport := &http.Transport{Dial: dialSocksProxy}
-	return &http.Client{Transport: transport}
+	
+	return &http.Client{Transport: transport, Timeout: httpTimeout * time.Second}
 }
 
 func httpGet(httpClient *http.Client, url string) (resp *http.Response, err error) {
@@ -43,7 +47,7 @@ func httpGetBody(httpClient *http.Client, url string) (body string, err error) {
 func httpGetStatus(httpClient *http.Client, url string) (status string, err error) {
 	resp, err := httpGet(httpClient, url)
 	if err != nil {
-		return "", err
+		return err.Error(), err
 	}
 	defer resp.Body.Close()
 	status = resp.Status
