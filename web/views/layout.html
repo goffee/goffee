@@ -35,8 +35,16 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="/">Home</a></li>
-            <li><a href="/oauth/authorize">Sign in with Github</a></li>
           </ul>
+          {{if .UserSignedIn }}
+            <p class="navbar-text navbar-right">
+              Signed in as {{.CurrentUser.GitHubLogin}}. <a href="/sign_out" class="navbar-link">Sign out</a>
+            </p>
+          {{else}}
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="/oauth/authorize">Sign in with Github</a></li>
+            </ul>
+          {{end}}
         </div><!--/.nav-collapse -->
       </div>
     </nav>

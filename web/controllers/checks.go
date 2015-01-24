@@ -7,41 +7,44 @@ import (
 	"strconv"
 
 	"github.com/gophergala/goffee/data"
+	"github.com/gophergala/goffee/web/helpers"
 	"github.com/gophergala/goffee/web/render"
 	"github.com/zenazn/goji/web"
 )
 
 // ChecksIndex render the checks index for the current user
 func ChecksIndex(c web.C, w http.ResponseWriter, req *http.Request) {
-	if !userSignedIn(c) {
+	if !helpers.UserSignedIn(c) {
 		http.Error(w, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/checks.html")
-	err := render.Template(c, w, templates, "layout", map[string]string{"Title": "Checks"})
+	err := render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "Checks"})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
+// NewCheck renders the new check form
 func NewCheck(c web.C, w http.ResponseWriter, req *http.Request) {
-	if !userSignedIn(c) {
+	if !helpers.UserSignedIn(c) {
 		http.Error(w, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/new_check.html")
-	err := render.Template(c, w, templates, "layout", map[string]string{"Title": "New Check"})
+	err := render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "New Check"})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
+// CreateCheck saves a new check to the DB
 func CreateCheck(c web.C, w http.ResponseWriter, req *http.Request) {
-	user, err := currentUser(c)
+	user, err := helpers.CurrentUser(c)
 
 	if err != nil {
 		http.Error(w, "You need to re-authenticate", http.StatusUnauthorized)
@@ -59,8 +62,9 @@ func CreateCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 	check.Create()
 }
 
+// ShowCheck renders a single check
 func ShowCheck(c web.C, w http.ResponseWriter, req *http.Request) {
-	user, err := currentUser(c)
+	user, err := helpers.CurrentUser(c)
 
 	if err != nil {
 		http.Error(w, "You need to re-authenticate", http.StatusUnauthorized)

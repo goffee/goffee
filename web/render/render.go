@@ -7,15 +7,28 @@ import (
 	"html/template"
 	"net/http"
 
+	"github.com/gophergala/goffee/web/helpers"
 	"github.com/zenazn/goji/web"
 )
 
 // Template renders HTML templates
-func Template(c web.C, w http.ResponseWriter, templates []string, name string, data interface{}) error {
+func Template(c web.C, w http.ResponseWriter, templates []string, name string, data map[string]interface{}) error {
 	t, err := template.ParseFiles(templates...)
 	if err != nil {
 		return err
 	}
+
+	var loggedIn bool
+	user, err := helpers.CurrentUser(c)
+
+	if err != nil {
+		loggedIn = false
+	} else {
+		loggedIn = true
+	}
+
+	data["CurrentUser"] = user
+	data["UserSignedIn"] = loggedIn
 
 	err = t.ExecuteTemplate(w, name, data)
 	if err != nil {
