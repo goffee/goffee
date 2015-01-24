@@ -12,22 +12,11 @@ const batchSize = 10
 const timeout = 5
 
 func FetchBatch() (result []string) {
-	c, err := redis.Dial("tcp", RedisAddressWithPort)
-	if err != nil {
-		panic(err)
-	}
-	defer c.Close()
+	return listFetch("jobs")
+}
 
-	for i := 0; i < batchSize; i++ {
-		reply, err := redis.Values(c.Do("BRPOP", "jobs", timeout))
-		if err != nil {
-			break
-		}
-		item := string(reply[1].([]byte))
-		result = append(result, item)
-	}
-
-	return
+func FetchResults() (results []string) {
+	return listFetch("results")
 }
 
 func WriteResult(result string) {
@@ -46,12 +35,32 @@ func WriteResult(result string) {
 	return
 }
 
-func AddJob(url string) {
+func AddJob(job string) {
 	c, err := redis.Dial("tcp", RedisAddressWithPort)
 	if err != nil {
 		panic(err)
 	}
 	defer c.Close()
 
-	c.Do("LPUSH", "jobs", url)
+	c.Do("LPUSH", "jobs", job)
+	fmt.Println("Job added:", job)
+}
+
+func listFetch(listName string) (results []string) {
+	c, err := redis.Dial("tcp", RedisAddressWithPort)
+	if err != nil {
+		panic(err)
+	}
+	defer c.Close()
+
+	for i := 0; i < batchSize; i++ {
+		reply, err := redis.Values(c.Do("BRPOP", listName, timeout))
+		if err != nil {
+			break
+		}
+		item := string(reply[1].([]byte))
+		results = append(results, item)
+	}
+
+	return results
 }
