@@ -1,0 +1,20 @@
+{{define "body"}}
+<div class="checks-header">
+  <h1>
+    Check: {{.Check.URL}}
+    <span class="label label-success">up</span>
+  </h1>
+</div>
+
+<div class="panel panel-success">
+  <div class="panel-heading">
+    <h3 class="panel-title">
+      <span class="badge">{{.Check.Status}}</span>
+      {{.Check.URL}}
+    </h3>
+  </div>
+  <div class="panel-body">
+    Last checked <time datetime="1996-12-19T16:39:57-08:00">1996-12-19T16:39:57-08:00</time>
+  </div>
+</div>
+{{end}}

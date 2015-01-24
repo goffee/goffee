@@ -55,6 +55,9 @@ func StartServer() {
 	goji.Get("/oauth/callback", controllers.OAuthCallback)
 
 	goji.Get("/checks", controllers.ChecksIndex)
+	goji.Get("/checks/:id", controllers.ShowCheck)
+	goji.Get("/checks/new", controllers.NewCheck)
+	goji.Post("/checks", controllers.CreateCheck)
 
 	goji.Serve()
 }

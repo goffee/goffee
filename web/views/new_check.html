@@ -1,0 +1,13 @@
+{{define "body"}}
+<div class="checks-header">
+  <h1>Let's add a new check!</h1>
+</div>
+
+<form action="/checks" method="POST">
+  <div class="form-group">
+    <label for="url">URL</label>
+    <input type="url" class="form-control" id="url" name="url" placeholder="Enter URL" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Create Check</button>
+</form>
+{{end}}

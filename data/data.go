@@ -57,6 +57,11 @@ func (u *User) Checks() (checks []Check, err error) {
 	return checks, res.Error
 }
 
+func (u *User) Check(id int64) (check Check, err error) {
+	res := db.Where("user_id = ? and id = ?", u.Id, id).First(&check)
+	return check, res.Error
+}
+
 func (c *Check) Create() error {
 	res := db.Create(c)
 	return res.Error
