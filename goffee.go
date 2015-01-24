@@ -18,6 +18,7 @@ import (
 var webMode bool
 var torFetch bool
 var redisAddress string
+const ipReflector = "http://stephensykes.com/ip_reflection.html"
 
 func init() {
 	flag.BoolVar(&webMode, "webmode", false, "Run goffee in webmode")
@@ -42,8 +43,7 @@ func main() {
 			fmt.Println(batch)
 			for _, item := range batch {
 				if item == "newip" {
-					ip, _ := tor.NewIP()
-					fmt.Println(ip) // may not print anything, info from tor is not reliable
+					newip()
 				} else {
 					wg.Add(1)
 					go check(item, &wg)
@@ -53,6 +53,18 @@ func main() {
 			wg.Wait()
 		}
 	}
+}
+
+func newip() {
+	tor.NewIP()
+	body, err := tor.TorGet(ipReflector)
+	var result string
+	if err != nil {
+		result = err.Error()
+	} else {
+		result = body
+	}
+	queue.WriteResult(time.Now().Format(time.RFC3339) + " newip " + result)	
 }
 
 func check(address string, wg *sync.WaitGroup) {
