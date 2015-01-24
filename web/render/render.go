@@ -6,14 +6,23 @@ import (
 	"encoding/json"
 	"html/template"
 	"net/http"
+	"time"
 
 	"github.com/gophergala/goffee/web/helpers"
 	"github.com/zenazn/goji/web"
 )
 
+func formatTime(t time.Time) string {
+	return t.Format(time.RFC3339)
+}
+
 // Template renders HTML templates
 func Template(c web.C, w http.ResponseWriter, templates []string, name string, data map[string]interface{}) error {
-	t, err := template.ParseFiles(templates...)
+	funcMap := template.FuncMap{
+		"formatTime": formatTime,
+	}
+
+	t, err := template.New("").Funcs(funcMap).ParseFiles(templates...)
 	if err != nil {
 		return err
 	}
