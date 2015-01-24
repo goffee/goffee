@@ -57,6 +57,11 @@ func Checks() (checks []Check, err error) {
 	return checks, res.Error
 }
 
+func ChecksByURL(url string) (checks []Check, err error) {
+	res := db.Where("url = ?", url).Find(&checks)
+	return checks, res.Error
+}
+
 func (u *User) Checks() (checks []Check, err error) {
 	res := db.Model(u).Related(&checks)
 	return checks, res.Error

@@ -10,11 +10,13 @@ import (
 	"github.com/gophergala/goffee/scheduler"
 	"github.com/gophergala/goffee/tor"
 	"github.com/gophergala/goffee/web"
+	"github.com/gophergala/goffee/writer"
 )
 
 var webMode bool
 var torFetch bool
 var schedulerMode bool
+var writerMode bool
 var redisAddress string
 
 const ipReflector = "http://stephensykes.com/ip_reflection.html"
@@ -23,6 +25,7 @@ func init() {
 	flag.BoolVar(&webMode, "webmode", false, "Run goffee in webmode")
 	flag.BoolVar(&torFetch, "torfetch", false, "Fetch something via Tor")
 	flag.BoolVar(&schedulerMode, "scheduler", false, "Run goffee scheduler")
+	flag.BoolVar(&writerMode, "writer", false, "Run goffee writer")
 	flag.StringVar(&redisAddress, "redisaddress", "", "Address of redis including port")
 	flag.Parse()
 }
@@ -57,6 +60,10 @@ func main() {
 
 	if schedulerMode {
 		scheduler.Run()
+	}
+
+	if writerMode {
+		writer.Run()
 	}
 }
 
