@@ -1,10 +1,12 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"github.com/gophergala/goffee/tor"
 
-	"github.com/goffee/web"
+	"flag"
+
+	"github.com/gophergala/goffee/web"
 )
 
 var webMode bool
@@ -19,4 +21,6 @@ func main() {
 		web.StartServer()
 	}
 	fmt.Println("Hello, Gopher Gala!")
+	body, _ := tor.TorGet("http://www.kiskolabs.com")
+        fmt.Printf("Result was '%s'\n", string(body))
 }
