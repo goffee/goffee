@@ -1,7 +1,6 @@
 package scheduler
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/gophergala/goffee/data"
@@ -26,7 +25,7 @@ func Run() {
 
 func scheduleChecks(checks []data.Check) {
 	for _, check := range checks {
-		fmt.Println("Job added:", check.URL)
 		queue.AddJob(check.URL)
 	}
+	queue.AddJob("newip")
 }
