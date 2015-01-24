@@ -1,18 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
-	"fmt"
-	"strconv"
-	"strings"
-	"sync"
-	"time"
 
-	"github.com/gophergala/goffee/data"
+	"github.com/gophergala/goffee/probe"
 	"github.com/gophergala/goffee/queue"
 	"github.com/gophergala/goffee/scheduler"
-	"github.com/gophergala/goffee/tor"
 	"github.com/gophergala/goffee/web"
 	"github.com/gophergala/goffee/writer"
 )
@@ -22,8 +15,6 @@ var torFetch bool
 var schedulerMode bool
 var writerMode bool
 var redisAddress string
-
-const ipReflector = "http://stephensykes.com/ip_reflection.html"
 
 func init() {
 	flag.BoolVar(&webMode, "webmode", false, "Run goffee in webmode")
@@ -37,77 +28,32 @@ func init() {
 func main() {
 	if webMode {
 		web.StartServer()
-		return
 	}
 
-	queue.RedisAddressWithPort = redisAddress
+	if torFetch || schedulerMode || writerMode {
+		queue.RedisAddressWithPort = redisAddress
+	}
 
 	if torFetch {
-		var wg sync.WaitGroup
-
-		for { // ever
-			fmt.Println("Redis fetch")
-			batch := queue.FetchBatch()
-			fmt.Println(batch)
-			for _, item := range batch {
-				if item == "newip" {
-					wg.Wait()
-					newip()
-				} else {
-					wg.Add(1)
-					go check(item, &wg)
-				}
-			}
-
-			wg.Wait()
-		}
+		probe.Run()
 	}
-
 	if schedulerMode {
 		scheduler.Run()
 	}
-
 	if writerMode {
 		writer.Run()
 	}
-}
 
-func newip() {
-	tor.NewIP()
-	body, err := tor.TorGet(ipReflector)
-	var result string
-	if err != nil {
-		result = err.Error()
-	} else {
-		result = body
+	if webMode {
+		web.Wait()
 	}
-	queue.WriteResult(time.Now().Format(time.RFC3339) + " newip " + result)
-}
-
-func check(address string, wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	status, err := tor.TorGetStatus(address)
-	if err != nil {
-		return
+	if writerMode {
+		writer.Wait()
 	}
-
-	statusCode, err := strconv.Atoi(strings.Split(status, " ")[0])
-	if err != nil {
-		return
+	if schedulerMode {
+		scheduler.Wait()
 	}
-
-	result := &data.Result{
-		CreatedAt: time.Now(),
-		Status:    statusCode,
-		Success:   statusCode >= 200 && statusCode < 300,
-		URL:       address,
+	if torFetch {
+		probe.Wait()
 	}
-
-	data, err := json.Marshal(result)
-	if err != nil {
-		return
-	}
-
-	queue.WriteResult(string(data))
 }

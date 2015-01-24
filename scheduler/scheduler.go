@@ -7,9 +7,13 @@ import (
 	"github.com/gophergala/goffee/queue"
 )
 
-var RedisAddressWithPort string
+var exit = make(chan bool)
 
 func Run() {
+	go run()
+}
+
+func run() {
 	data.InitDatabase()
 
 	if checks, err := data.Checks(); err == nil {
@@ -28,4 +32,8 @@ func scheduleChecks(checks []data.Check) {
 		queue.AddJob(check.URL)
 	}
 	queue.AddJob("newip")
+}
+
+func Wait() {
+	<-exit
 }
