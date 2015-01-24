@@ -1,9 +1,14 @@
 package tor
 
 import (
-  "net/http"
-  "github.com/hailiang/gosocks"
-  "io/ioutil"
+	"net"
+	"net/http"
+  	"github.com/hailiang/gosocks"
+  	"io/ioutil"
+	"fmt"
+	"bufio"
+	"strings"
+	"errors"
 )
 
 func prepareProxyClient() *http.Client {
@@ -49,5 +54,46 @@ func TorGet(url string) (body string, err error) {
 func TorGetStatus(url string) (status string, err error) {
         clientPtr := prepareProxyClient()
         status, err = httpGetStatus(clientPtr, url)
+	return
+}
+
+func controlCommand(commands []string) (result string, err error) {
+	conn, err := net.Dial("tcp", "127.0.0.1:9051")
+	if err != nil {
+		return
+	}
+
+	fmt.Fprintf(conn, "AUTHENTICATE \"hM4LoBWbaVCz4rb\"\r\n")	
+	status, err := bufio.NewReader(conn).ReadString('\n')
+	parts := strings.Split(status, " ")
+	if parts[0] != "250" || err != nil {
+		return status, err
+	}
+	
+	for _, cmd := range commands {
+		fmt.Fprintf(conn, cmd + "\r\n")
+		status, err = bufio.NewReader(conn).ReadString('\n')
+		result = status
+	}
+	
+	return
+}
+
+func NewIP() (newip string, err error) {
+	cmds := []string{
+		"SIGNAL NEWNYM",
+		"GETINFO stream-status",
+	}
+	result, err := controlCommand(cmds)
+	if err != nil {
+		return
+	}
+	parts := strings.Split(result, " ")
+	if len(parts) == 4 {
+		newip = parts[3]
+	} else {
+		err = errors.New("No IP found")
+	}
+	
 	return
 }

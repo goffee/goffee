@@ -24,7 +24,9 @@ func main() {
 	}
 
 	if torFetch {
-		body, _ := tor.TorGet("http://www.kiskolabs.com")
-	        fmt.Printf("Result was '%s'\n", string(body))
+		ip, _ := tor.NewIP()
+		fmt.Println(ip) // may not print anything, info from tor is not reliable
+		status, _ := tor.TorGetStatus("http://www.apple.com")
+		fmt.Println(status)
 	}
 }
