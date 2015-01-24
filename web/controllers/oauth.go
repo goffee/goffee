@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/google/go-github/github"
@@ -42,7 +41,8 @@ func OAuthCallback(c web.C, w http.ResponseWriter, req *http.Request) {
 	// Exchange the received code for a token
 	token, err := conf.Exchange(oauth2.NoContext, code)
 	if err != nil {
-		log.Fatal(err)
+		renderError(c, w, "Authentication failed", http.StatusUnauthorized)
+		return
 	}
 
 	session := c.Env["Session"].(*sessions.Session)
@@ -52,8 +52,8 @@ func OAuthCallback(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, _, err := githubClient.Users.Get("")
 
 	if err != nil {
-		session.AddFlash("Authentication failed")
-		http.Redirect(w, req, "/", http.StatusSeeOther)
+		renderError(c, w, "Authentication failed", http.StatusUnauthorized)
+		return
 	}
 
 	u := &data.User{

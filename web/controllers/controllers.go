@@ -7,6 +7,15 @@ import (
 	"github.com/zenazn/goji/web"
 )
 
+func renderError(c web.C, w http.ResponseWriter, message string, status int) {
+	templates := render.GetBaseTemplates()
+	templates = append(templates, "web/views/error.html")
+	err := render.Template(c, w, templates, "layout", map[string]interface{}{"Status": status, "Message": message})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
 // Home serves the home page
 func Home(c web.C, w http.ResponseWriter, req *http.Request) {
 	templates := render.GetBaseTemplates()

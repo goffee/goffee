@@ -1,0 +1,13 @@
+{{{define "body"}}}
+<div class="error-header">
+  <h1>An error occured ({{{.Status}}})</h1>
+  <p class="lead">
+    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+    {{{if .Message}}}
+      {{{.Message}}}
+    {{{else}}}
+      Something went wrong
+    {{{end}}}
+  </p>
+</div>
+{{{end}}}

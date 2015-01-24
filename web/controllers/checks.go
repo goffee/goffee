@@ -18,13 +18,13 @@ func ChecksIndex(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, err := helpers.CurrentUser(c)
 
 	if err != nil {
-		http.Error(w, "You need to re-authenticate", http.StatusUnauthorized)
+		renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
 	checks, err := user.Checks()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		renderError(c, w, "Something went wrong", http.StatusInternalServerError)
 		return
 	}
 
@@ -39,7 +39,7 @@ func ChecksIndex(c web.C, w http.ResponseWriter, req *http.Request) {
 // NewCheck renders the new check form
 func NewCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 	if !helpers.UserSignedIn(c) {
-		http.Error(w, "You need to re-authenticate", http.StatusUnauthorized)
+		renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
@@ -57,7 +57,7 @@ func CreateCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, err := helpers.CurrentUser(c)
 
 	if err != nil {
-		http.Error(w, "You need to re-authenticate", http.StatusUnauthorized)
+		renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
@@ -81,20 +81,20 @@ func ShowCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, err := helpers.CurrentUser(c)
 
 	if err != nil {
-		http.Error(w, "You need to re-authenticate", http.StatusUnauthorized)
+		renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
 	checkId, err := strconv.ParseInt(c.URLParams["id"], 10, 64)
 	if err != nil {
-		http.Error(w, "Check not found", http.StatusNotFound)
+		renderError(c, w, "Check not found", http.StatusNotFound)
 		return
 	}
 
 	check, err := user.Check(checkId)
 
 	if err != nil {
-		http.Error(w, "Check not found", http.StatusNotFound)
+		renderError(c, w, "Check not found", http.StatusNotFound)
 		return
 	}
 
