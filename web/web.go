@@ -1,19 +1,16 @@
 package web
 
 import (
-	"fmt"
 	"net/http"
 
+	"github.com/gophergala/goffee/web/controllers"
 	"github.com/gorilla/sessions"
+	"github.com/hypebeast/gojistatic"
 	"github.com/zenazn/goji"
 	"github.com/zenazn/goji/web"
 )
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
-
-func root(c web.C, w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Goffee")
-}
 
 // SessionMiddleware adds session support to Goffee
 func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
@@ -36,7 +33,10 @@ func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
 
 // StartServer starts the web server
 func StartServer() {
+	goji.Use(gojistatic.Static("public", gojistatic.StaticOptions{SkipLogging: true}))
 	goji.Use(SessionMiddleware)
-	goji.Get("/", root)
+
+	goji.Get("/", controllers.Home)
+
 	goji.Serve()
 }

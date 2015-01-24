@@ -1,0 +1,33 @@
+{{define "layout"}}
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Goffee</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link href="css/normalize.css" rel="stylesheet" media="all">
+    <link href="css/styles.css" rel="stylesheet" media="all">    -->
+    <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv-printshiv.min.js"></script><![endif]-->
+  </head>
+  <body>
+    <header role="banner">
+      <h1>Goffee</h1>
+      <nav role="navigation">
+
+      </nav>
+    </header>
+
+    <div class="wrap">
+      <main role="main">
+        {{template "body" .}}
+      </main>
+    </div>
+
+    <footer role="contentinfo">
+      <small>Copyright &copy; <time datetime="2015">2015</time> Joao Cardoso, Matias Korhonen, &amp; Stephen Sykes</small>
+    </footer>
+
+  </body>
+  </html>
+{{end}}
