@@ -29,6 +29,8 @@ type Result struct {
 	Success   bool
 	IP        string `gorm:"column:ip"`
 	CheckId   int64
+
+	URL string `sql:"-"`
 }
 
 type User struct {

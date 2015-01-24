@@ -1,11 +1,15 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
+	"github.com/gophergala/goffee/data"
 	"github.com/gophergala/goffee/queue"
 	"github.com/gophergala/goffee/scheduler"
 	"github.com/gophergala/goffee/tor"
@@ -83,12 +87,26 @@ func check(address string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	status, err := tor.TorGetStatus(address)
-	var result string
 	if err != nil {
-		result = err.Error()
-	} else {
-		result = status
+		return
 	}
 
-	queue.WriteResult(time.Now().Format(time.RFC3339) + " " + address + " " + result)
+	statusCode, err := strconv.Atoi(strings.Split(status, " ")[0])
+	if err != nil {
+		return
+	}
+
+	result := &data.Result{
+		CreatedAt: time.Now(),
+		Status:    statusCode,
+		Success:   statusCode >= 200 && statusCode < 300,
+		URL:       address,
+	}
+
+	data, err := json.Marshal(result)
+	if err != nil {
+		return
+	}
+
+	queue.WriteResult(string(data))
 }
