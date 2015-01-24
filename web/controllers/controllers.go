@@ -6,7 +6,7 @@ import (
 	"github.com/gophergala/goffee/web/render"
 )
 
-// Home serves the hope page
+// Home serves the home page
 func Home(w http.ResponseWriter, req *http.Request) {
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/home.html")
