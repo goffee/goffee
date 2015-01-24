@@ -1,28 +1,28 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/gophergala/goffee/tor"
-
 	"flag"
-
-	"github.com/gophergala/goffee/web"
-
-	"github.com/gophergala/goffee/queue"
-
+	"fmt"
 	"sync"
 	"time"
+
+	"github.com/gophergala/goffee/queue"
+	"github.com/gophergala/goffee/scheduler"
+	"github.com/gophergala/goffee/tor"
+	"github.com/gophergala/goffee/web"
 )
 
 var webMode bool
 var torFetch bool
+var schedulerMode bool
 var redisAddress string
+
 const ipReflector = "http://stephensykes.com/ip_reflection.html"
 
 func init() {
 	flag.BoolVar(&webMode, "webmode", false, "Run goffee in webmode")
 	flag.BoolVar(&torFetch, "torfetch", false, "Fetch something via Tor")
+	flag.BoolVar(&schedulerMode, "scheduler", false, "Run goffee scheduler")
 	flag.StringVar(&redisAddress, "redisaddress", "", "Address of redis including port")
 	flag.Parse()
 }
@@ -30,11 +30,12 @@ func init() {
 func main() {
 	if webMode {
 		web.StartServer()
+		return
 	}
 
-	if torFetch {
-		queue.RedisAddressWithPort = redisAddress
+	queue.RedisAddressWithPort = redisAddress
 
+	if torFetch {
 		var wg sync.WaitGroup
 
 		for { // ever
@@ -53,6 +54,10 @@ func main() {
 			wg.Wait()
 		}
 	}
+
+	if schedulerMode {
+		scheduler.Run()
+	}
 }
 
 func newip() {
@@ -64,7 +69,7 @@ func newip() {
 	} else {
 		result = body
 	}
-	queue.WriteResult(time.Now().Format(time.RFC3339) + " newip " + result)	
+	queue.WriteResult(time.Now().Format(time.RFC3339) + " newip " + result)
 }
 
 func check(address string, wg *sync.WaitGroup) {

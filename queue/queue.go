@@ -45,3 +45,13 @@ func WriteResult(result string) {
 
 	return
 }
+
+func AddJob(url string) {
+	c, err := redis.Dial("tcp", RedisAddressWithPort)
+	if err != nil {
+		panic(err)
+	}
+	defer c.Close()
+
+	c.Do("LPUSH", "jobs", url)
+}

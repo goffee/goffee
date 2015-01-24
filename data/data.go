@@ -52,6 +52,11 @@ func InitDatabase() (err error) {
 	return nil
 }
 
+func Checks() (checks []Check, err error) {
+	res := db.Find(&checks)
+	return checks, res.Error
+}
+
 func (u *User) Checks() (checks []Check, err error) {
 	res := db.Model(u).Related(&checks)
 	return checks, res.Error
