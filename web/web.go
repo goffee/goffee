@@ -34,7 +34,7 @@ func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
 }
 
 // StartServer starts the web server
-func StartServer() {
+func StartServer(bind string) {
 	data.InitDatabase()
 
 	secureMiddleware := secure.New(secure.Options{
@@ -65,7 +65,7 @@ func StartServer() {
 	m.Get("/checks/:id", controllers.ShowCheck)
 	m.Post("/checks", controllers.CreateCheck)
 
-	go graceful.ListenAndServe("localhost:8000", m)
+	go graceful.ListenAndServe(bind, m)
 }
 
 func Wait() {

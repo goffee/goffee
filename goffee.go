@@ -15,6 +15,7 @@ var probeMode bool
 var schedulerMode bool
 var writerMode bool
 var redisAddress string
+var bind string
 
 func init() {
 	flag.BoolVar(&webMode, "webmode", false, "Run goffee in webmode")
@@ -22,6 +23,7 @@ func init() {
 	flag.BoolVar(&schedulerMode, "scheduler", false, "Run goffee scheduler")
 	flag.BoolVar(&writerMode, "writer", false, "Run goffee writer")
 	flag.StringVar(&redisAddress, "redisaddress", "127.0.0.1:6379", "Address of redis including port")
+	flag.StringVar(&bind, "bind", "127.0.0.1:8000", "Address to bind to")
 	flag.Parse()
 
 	// If no mode has been defined, just launch them all!
@@ -35,7 +37,7 @@ func init() {
 
 func main() {
 	if webMode {
-		web.StartServer()
+		web.StartServer(bind)
 	}
 
 	if probeMode || schedulerMode || writerMode {
