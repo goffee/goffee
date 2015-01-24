@@ -10,9 +10,11 @@ import (
 )
 
 var webMode bool
+var torFetch bool
 
 func init() {
 	flag.BoolVar(&webMode, "webmode", false, "Run goffee in webmode")
+	flag.BoolVar(&torFetch, "torfetch", false, "Fetch something via Tor")
 	flag.Parse()
 }
 
@@ -20,7 +22,9 @@ func main() {
 	if webMode {
 		web.StartServer()
 	}
-	fmt.Println("Hello, Gopher Gala!")
-	body, _ := tor.TorGet("http://www.kiskolabs.com")
-        fmt.Printf("Result was '%s'\n", string(body))
+
+	if torFetch {
+		body, _ := tor.TorGet("http://www.kiskolabs.com")
+	        fmt.Printf("Result was '%s'\n", string(body))
+	}
 }
