@@ -16,3 +16,13 @@ func Home(c web.C, w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
+
+// NotFound serves the 404 page
+func NotFound(c web.C, w http.ResponseWriter, req *http.Request) {
+	templates := render.GetBaseTemplates()
+	templates = append(templates, "web/views/404.html")
+	err := render.Template(c, w, templates, "layout", map[string]interface{}{})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}

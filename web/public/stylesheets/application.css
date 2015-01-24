@@ -2,7 +2,8 @@ body {
   padding-top: 50px;
 }
 
-.home-header {
+.home-header,
+.error-header {
   padding: 40px 15px;
   text-align: center;
 }

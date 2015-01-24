@@ -67,9 +67,12 @@ func StartServer(bind string) {
 
 	m.Get("/checks/:check_id/results", controllers.ResultsIndex)
 
+	m.NotFound(controllers.NotFound)
+
 	go graceful.ListenAndServe(bind, m)
 }
 
+// Wait ...
 func Wait() {
 	graceful.Wait()
 }
