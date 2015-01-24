@@ -1,8 +1,13 @@
 $(function() {
   $("time[datetime]").each(function(index, el) {
-    var $el;
-    $el = $(el);
-    $el.attr("title", $el.attr("datetime"))
-    return $el.text(moment($el.attr("datetime")).fromNow());
+    var $el = $(el),
+        m = moment($el.attr("datetime"));
+
+    $el.attr("title", $el.attr("datetime"));
+    if ($el.data("role") == "timeago") {
+      $el.text(m.fromNow());
+    } else {
+      $el.text(m.calendar());
+    }
   });
 });
