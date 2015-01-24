@@ -58,13 +58,15 @@ func check(address string, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	status, err := tor.TorGetStatus(address)
-	if err != nil {
-		return
-	}
 
-	statusCode, err := strconv.Atoi(strings.Split(status, " ")[0])
+	var statusCode int
 	if err != nil {
-		return
+		statusCode = -1
+	} else {
+		statusCode, err = strconv.Atoi(strings.Split(status, " ")[0])
+		if err != nil {
+			statusCode = -2
+		}
 	}
 
 	result := &data.Result{
