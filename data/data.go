@@ -17,6 +17,7 @@ type Check struct {
 	URL       string `gorm:"column:url"`
 	Status    int    // status code of last result
 	Success   bool   // success status of last result
+	UserId    int64
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
@@ -51,9 +52,8 @@ func InitDatabase() (err error) {
 	return nil
 }
 
-func Checks() ([]Check, error) {
-	var checks []Check
-	res := db.Find(&checks)
+func (u *User) Checks() (checks []Check, err error) {
+	res := db.Model(u).Related(&checks)
 	return checks, res.Error
 }
 
@@ -84,8 +84,7 @@ func (c *Check) AddResult(r *Result) error {
 	return nil
 }
 
-func (c *Check) Results() ([]Result, error) {
-	var results []Result
+func (c *Check) Results() (results []Result, err error) {
 	res := db.Model(c).Related(&results)
 	return results, res.Error
 }
