@@ -5,7 +5,6 @@ import (
 	"github.com/gophergala/goffee/tor"
 
 	"flag"
-	"fmt"
 
 	"github.com/goffee/web"
 )
