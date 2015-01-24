@@ -6,10 +6,12 @@ import (
 	"encoding/json"
 	"html/template"
 	"net/http"
+
+	"github.com/zenazn/goji/web"
 )
 
 // Template renders HTML templates
-func Template(w http.ResponseWriter, templates []string, name string, data interface{}) error {
+func Template(c web.C, w http.ResponseWriter, templates []string, name string, data interface{}) error {
 	t, err := template.ParseFiles(templates...)
 	if err != nil {
 		return err

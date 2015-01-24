@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 
 	"github.com/gophergala/goffee/data"
@@ -16,20 +18,27 @@ func currentSession(c web.C) *sessions.Session {
 
 func currentUser(c web.C) (data.User, error) {
 	session := currentSession(c)
-	userID := session.Values["UserId"].(int64)
-	return data.FindUser(userID)
+	userID := session.Values["UserId"]
+	fmt.Println(userID)
+
+	switch userID := userID.(type) {
+	case int64:
+		return data.FindUser(userID)
+	default:
+		return data.User{}, errors.New("User not found")
+	}
 }
 
 func userSignedIn(c web.C) bool {
 	_, err := currentUser(c)
-	return err != nil
+	return err == nil
 }
 
 // Home serves the home page
-func Home(w http.ResponseWriter, req *http.Request) {
+func Home(c web.C, w http.ResponseWriter, req *http.Request) {
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/home.html")
-	err := render.Template(w, templates, "layout", map[string]string{})
+	err := render.Template(c, w, templates, "layout", map[string]string{})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

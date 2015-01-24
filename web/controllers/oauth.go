@@ -57,6 +57,7 @@ func OAuthCallback(c web.C, w http.ResponseWriter, req *http.Request) {
 	u.UpdateOrCreate()
 
 	session.Values["UserId"] = u.Id
+	session.Save(req, w)
 
 	http.Redirect(w, req, "/checks", http.StatusFound)
 }
