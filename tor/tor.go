@@ -30,8 +30,24 @@ func httpGetBody(httpClient *http.Client, url string) (body string, err error) {
   	return
 }
 
+func httpGetStatus(httpClient *http.Client, url string) (status string, err error) {
+  	resp, err := httpGet(httpClient, url)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	status = resp.Status
+  	return
+}
+
 func TorGet(url string) (body string, err error) {
         clientPtr := prepareProxyClient()
         body, err = httpGetBody(clientPtr, url)
+	return
+}
+
+func TorGetStatus(url string) (status string, err error) {
+        clientPtr := prepareProxyClient()
+        status, err = httpGetStatus(clientPtr, url)
 	return
 }
