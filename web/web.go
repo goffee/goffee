@@ -53,6 +53,7 @@ func StartServer() {
 
 	goji.Get("/oauth/authorize", controllers.OAuthAuthorize)
 	goji.Get("/oauth/callback", controllers.OAuthCallback)
+	goji.Get("/sign_out", controllers.SignOut)
 
 	goji.Get("/checks", controllers.ChecksIndex)
 	goji.Get("/checks/:id", controllers.ShowCheck)

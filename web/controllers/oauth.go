@@ -6,6 +6,7 @@ import (
 
 	"github.com/google/go-github/github"
 	"github.com/gophergala/goffee/data"
+	"github.com/gophergala/goffee/web/helpers"
 	"github.com/gorilla/sessions"
 	"github.com/zenazn/goji/web"
 	"golang.org/x/oauth2"
@@ -23,6 +24,14 @@ var conf = &oauth2.Config{
 func OAuthAuthorize(w http.ResponseWriter, req *http.Request) {
 	url := conf.AuthCodeURL("state", oauth2.AccessTypeOnline)
 	http.Redirect(w, req, url, http.StatusFound)
+}
+
+// SignOut makes the user sign out
+func SignOut(c web.C, w http.ResponseWriter, req *http.Request) {
+	session := helpers.CurrentSession(c)
+	session.Values = map[interface{}]interface{}{}
+	session.Save(req, w)
+	http.Redirect(w, req, "/", http.StatusFound)
 }
 
 // OAuthCallback handles the callback from GitHub
