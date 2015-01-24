@@ -5,15 +5,16 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/github"
+	oauth2github "golang.org/x/oauth2/github"
 )
 
 var conf = &oauth2.Config{
 	ClientID:     "508322171059309cedad",
 	ClientSecret: "8cb47d06cc58c8bc2b4c0d01b870d117cf086c40",
 	Scopes:       []string{},
-	Endpoint:     github.Endpoint,
+	Endpoint:     oauth2github.Endpoint,
 }
 
 // OAuthAuthorize makes the user login
@@ -33,7 +34,9 @@ func OAuthCallback(w http.ResponseWriter, req *http.Request) {
 		log.Fatal(err)
 	}
 
-	// client := conf.Client(oauth2.NoContext, token)
+	httpClient := conf.Client(oauth2.NoContext, token)
+	githubClient := github.NewClient(httpClient)
+	user, _, err := githubClient.Users.Get("")
 
-	fmt.Fprintf(w, "Token: %s!", token)
+	fmt.Fprintf(w, "Token: %s!", user.String())
 }
