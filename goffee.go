@@ -21,8 +21,16 @@ func init() {
 	flag.BoolVar(&probeMode, "torfetch", false, "Fetch something via Tor")
 	flag.BoolVar(&schedulerMode, "scheduler", false, "Run goffee scheduler")
 	flag.BoolVar(&writerMode, "writer", false, "Run goffee writer")
-	flag.StringVar(&redisAddress, "redisaddress", "", "Address of redis including port")
+	flag.StringVar(&redisAddress, "redisaddress", "127.0.0.1:6379", "Address of redis including port")
 	flag.Parse()
+
+	// If no mode has been defined, just launch them all!
+	if !webMode && !probeMode && !schedulerMode && !writerMode {
+		webMode = true
+		probeMode = true
+		schedulerMode = true
+		writerMode = true
+	}
 }
 
 func main() {
