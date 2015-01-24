@@ -25,7 +25,7 @@
       </div>
       <div class="panel-body">
         <p>
-          Last checked <time datetime="{{.UpdatedAt}}">{{.UpdatedAt}}</time>.&nbsp;
+          Last checked <time datetime="{{formatTime .UpdatedAt}}">{{formatTime .UpdatedAt}}</time>.&nbsp;
           <a class="" href="/checks/{{.Id}}" role="button">
             <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
             View details
