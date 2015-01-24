@@ -7,6 +7,7 @@ import (
 	"github.com/gophergala/goffee/web/controllers"
 	"github.com/gorilla/sessions"
 	"github.com/hypebeast/gojistatic"
+	"github.com/unrolled/secure"
 	"github.com/zenazn/goji"
 	"github.com/zenazn/goji/web"
 )
@@ -34,7 +35,16 @@ func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
 func StartServer() {
 	data.InitDatabase()
 
+	secureMiddleware := secure.New(secure.Options{
+		AllowedHosts:       []string{"example.com", "ssl.example.com"},
+		FrameDeny:          true,
+		ContentTypeNosniff: true,
+		BrowserXssFilter:   true,
+		IsDevelopment:      true,
+	})
+
 	goji.Use(gojistatic.Static("web/public", gojistatic.StaticOptions{SkipLogging: true}))
+	goji.Use(secureMiddleware.Handler)
 	goji.Use(SessionMiddleware)
 
 	goji.Get("/", controllers.Home)
