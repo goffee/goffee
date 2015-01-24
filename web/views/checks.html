@@ -1,4 +1,4 @@
-{{define "body"}}
+{{{define "body"}}}
 <div class="checks-header">
   <h1>
     Checks
@@ -17,25 +17,25 @@
   <a class="btn btn-info" href="/checks/new" role="button">Add a new check</a>
 </p>
 
-{{range .Checks}}
+{{{range .Checks}}}
 
-  <div class="panel {{if .Success}} panel-success {{else if lt .Status 100}} panel-warning {{else}} panel-danger {{end}}">
+  <div class="panel {{{if .Success}}} panel-success {{{else if lt .Status 100}}} panel-warning {{{else}}} panel-danger {{{end}}}">
     <div class="panel-heading">
       <h3 class="panel-title">
         <span class="badge">
-          {{if lt .Status 100}}
+          {{{if lt .Status 100}}}
             Error
-          {{else}}
-            {{.Status}}
-          {{end}}
+          {{{else}}}
+            {{{.Status}}}
+          {{{end}}}
         </span>
-        {{.URL}}
+        {{{.URL}}}
       </h3>
     </div>
     <div class="panel-body">
       <p>
-        Last checked <time data-role="timeago" datetime="{{formatTime .UpdatedAt}}">{{formatTime .UpdatedAt}}</time>.&nbsp;
-        <a class="" href="/checks/{{.Id}}" role="button">
+        Last checked <time data-role="timeago" datetime="{{{formatTime .UpdatedAt}}}">{{{formatTime .UpdatedAt}}}</time>.&nbsp;
+        <a class="" href="/checks/{{{.Id}}}" role="button">
           <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
           View details
         </a>
@@ -43,6 +43,6 @@
     </div>
   </div>
 
-{{end}}
+{{{end}}}
 
-{{end}}
+{{{end}}}

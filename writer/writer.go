@@ -8,7 +8,13 @@ import (
 	"github.com/gophergala/goffee/queue"
 )
 
+var exit = make(chan bool)
+
 func Run() {
+	go run()
+}
+
+func run() {
 	data.InitDatabase()
 
 	for {
@@ -24,8 +30,12 @@ func Run() {
 
 			for _, check := range checks {
 				check.AddResult(&result)
-				fmt.Println("Added result: %v", result)
+				fmt.Printf("Added result: %v\n", result)
 			}
 		}
 	}
+}
+
+func Wait() {
+	<-exit
 }

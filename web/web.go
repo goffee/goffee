@@ -9,7 +9,7 @@ import (
 	"github.com/hypebeast/gojistatic"
 	"github.com/justinas/nosurf"
 	"github.com/unrolled/secure"
-	"github.com/zenazn/goji"
+	"github.com/zenazn/goji/graceful"
 	"github.com/zenazn/goji/web"
 )
 
@@ -25,6 +25,7 @@ func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
 		// Save it.
 		session.Save(r, w)
 
+		c.Env = make(map[string]interface{})
 		c.Env["Session"] = session
 
 		h.ServeHTTP(w, r)
@@ -33,7 +34,7 @@ func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
 }
 
 // StartServer starts the web server
-func StartServer() {
+func StartServer(bind string) {
 	data.InitDatabase()
 
 	secureMiddleware := secure.New(secure.Options{
@@ -44,23 +45,31 @@ func StartServer() {
 		IsDevelopment:      true,
 	})
 
-	goji.Use(gojistatic.Static("web/public", gojistatic.StaticOptions{SkipLogging: true}))
-	goji.Use(secureMiddleware.Handler)
-	goji.Use(SessionMiddleware)
-	goji.Use(nosurf.NewPure)
+	m := web.New()
 
-	goji.Get("/", controllers.Home)
+	m.Use(gojistatic.Static("web/public", gojistatic.StaticOptions{SkipLogging: true}))
+	m.Use(secureMiddleware.Handler)
+	m.Use(SessionMiddleware)
+	m.Use(nosurf.NewPure)
 
-	goji.Get("/ip", controllers.IP)
+	m.Get("/", controllers.Home)
 
-	goji.Get("/oauth/authorize", controllers.OAuthAuthorize)
-	goji.Get("/oauth/callback", controllers.OAuthCallback)
-	goji.Get("/sign_out", controllers.SignOut)
+	m.Get("/ip", controllers.IP)
 
-	goji.Get("/checks", controllers.ChecksIndex)
-	goji.Get("/checks/new", controllers.NewCheck)
-	goji.Get("/checks/:id", controllers.ShowCheck)
-	goji.Post("/checks", controllers.CreateCheck)
+	m.Get("/oauth/authorize", controllers.OAuthAuthorize)
+	m.Get("/oauth/callback", controllers.OAuthCallback)
+	m.Get("/sign_out", controllers.SignOut)
 
-	goji.Serve()
+	m.Get("/checks", controllers.ChecksIndex)
+	m.Get("/checks/new", controllers.NewCheck)
+	m.Get("/checks/:id", controllers.ShowCheck)
+	m.Post("/checks", controllers.CreateCheck)
+
+	m.Get("/checks/:check_id/results", controllers.ResultsIndex)
+
+	go graceful.ListenAndServe(bind, m)
+}
+
+func Wait() {
+	graceful.Wait()
 }
