@@ -22,7 +22,7 @@ func Template(c web.C, w http.ResponseWriter, templates []string, name string, d
 		"formatTime": formatTime,
 	}
 
-	t, err := template.New("").Funcs(funcMap).ParseFiles(templates...)
+	t, err := template.New("").Delims("{{{", "}}}").Funcs(funcMap).ParseFiles(templates...)
 	if err != nil {
 		return err
 	}

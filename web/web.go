@@ -62,5 +62,7 @@ func StartServer() {
 	goji.Get("/checks/:id", controllers.ShowCheck)
 	goji.Post("/checks", controllers.CreateCheck)
 
+	goji.Get("/checks/:check_id/results", controllers.ResultsIndex)
+
 	goji.Serve()
 }

@@ -93,6 +93,11 @@ func ShowCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 
 	check, err := user.Check(checkId)
 
+	if err != nil {
+		http.Error(w, "Check not found", http.StatusNotFound)
+		return
+	}
+
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/check.html")
 	err = render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "Check: " + check.URL, "Check": check})
