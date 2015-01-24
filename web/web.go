@@ -7,6 +7,7 @@ import (
 	"github.com/gophergala/goffee/web/controllers"
 	"github.com/gorilla/sessions"
 	"github.com/hypebeast/gojistatic"
+	"github.com/justinas/nosurf"
 	"github.com/unrolled/secure"
 	"github.com/zenazn/goji"
 	"github.com/zenazn/goji/web"
@@ -46,6 +47,7 @@ func StartServer() {
 	goji.Use(gojistatic.Static("web/public", gojistatic.StaticOptions{SkipLogging: true}))
 	goji.Use(secureMiddleware.Handler)
 	goji.Use(SessionMiddleware)
+	goji.Use(nosurf.NewPure)
 
 	goji.Get("/", controllers.Home)
 
@@ -56,8 +58,8 @@ func StartServer() {
 	goji.Get("/sign_out", controllers.SignOut)
 
 	goji.Get("/checks", controllers.ChecksIndex)
-	goji.Get("/checks/:id", controllers.ShowCheck)
 	goji.Get("/checks/new", controllers.NewCheck)
+	goji.Get("/checks/:id", controllers.ShowCheck)
 	goji.Post("/checks", controllers.CreateCheck)
 
 	goji.Serve()

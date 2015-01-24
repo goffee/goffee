@@ -9,6 +9,7 @@ import (
 	"github.com/gophergala/goffee/data"
 	"github.com/gophergala/goffee/web/helpers"
 	"github.com/gophergala/goffee/web/render"
+	"github.com/justinas/nosurf"
 	"github.com/zenazn/goji/web"
 )
 
@@ -36,7 +37,8 @@ func NewCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/new_check.html")
-	err := render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "New Check"})
+	csrf := nosurf.Token(req)
+	err := render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "New Check", "CSRFToken": csrf})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -60,6 +62,10 @@ func CreateCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 
 	check := &data.Check{URL: u.String(), UserId: user.Id}
 	check.Create()
+
+	path := fmt.Sprintf("/checks/%d", check.Id)
+
+	http.Redirect(w, req, path, http.StatusSeeOther)
 }
 
 // ShowCheck renders a single check

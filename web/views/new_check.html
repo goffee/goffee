@@ -4,6 +4,7 @@
 </div>
 
 <form action="/checks" method="POST">
+  <input type="hidden" name="csrf_token" value="{{ .CSRFToken }}">
   <div class="form-group">
     <label for="url">URL</label>
     <input type="url" class="form-control" id="url" name="url" placeholder="Enter URL" required>
