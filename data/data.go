@@ -89,3 +89,13 @@ func (c *Check) Results() ([]Result, error) {
 	res := db.Model(c).Related(&results)
 	return results, res.Error
 }
+
+func (u *User) UpdateOrCreate() error {
+	res := db.Where(User{GitHubId: u.GitHubId}).Assign(*u).FirstOrInit(u)
+	if res.Error != nil {
+		return res.Error
+	}
+
+	res = db.Save(u)
+	return res.Error
+}
