@@ -99,3 +99,11 @@ func (u *User) UpdateOrCreate() error {
 	res = db.Save(u)
 	return res.Error
 }
+
+func FindUser(id int64) (user User, err error) {
+	res := db.First(&user, id)
+	if res.Error != nil {
+		return user, res.Error
+	}
+	return user, nil
+}
