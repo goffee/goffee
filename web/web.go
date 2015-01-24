@@ -3,6 +3,7 @@ package web
 import (
 	"net/http"
 
+	"github.com/gophergala/goffee/data"
 	"github.com/gophergala/goffee/web/controllers"
 	"github.com/gorilla/sessions"
 	"github.com/hypebeast/gojistatic"
@@ -33,6 +34,8 @@ func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
 
 // StartServer starts the web server
 func StartServer() {
+	data.InitDatabase()
+
 	goji.Use(gojistatic.Static("web/public", gojistatic.StaticOptions{SkipLogging: true}))
 	goji.Use(SessionMiddleware)
 

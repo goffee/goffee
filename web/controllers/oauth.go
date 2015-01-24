@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/google/go-github/github"
+	"github.com/gophergala/goffee/data"
 	"golang.org/x/oauth2"
 	oauth2github "golang.org/x/oauth2/github"
 )
@@ -38,5 +38,12 @@ func OAuthCallback(w http.ResponseWriter, req *http.Request) {
 	githubClient := github.NewClient(httpClient)
 	user, _, err := githubClient.Users.Get("")
 
-	fmt.Fprintf(w, "Token: %s!", user.String())
+	u := &data.User{
+		Name:        *user.Name,
+		GitHubId:    int64(*user.ID),
+		GitHubLogin: *user.Login,
+		Email:       *user.Email,
+		OAuthToken:  token.AccessToken,
+	}
+	u.UpdateOrCreate()
 }
