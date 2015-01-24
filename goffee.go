@@ -11,6 +11,7 @@ import (
 	"github.com/gophergala/goffee/queue"
 	
 	"sync"
+	"time"
 )
 
 var webMode bool
@@ -64,5 +65,5 @@ func check(address string, wg *sync.WaitGroup) {
 		result = status
 	}
 	
-	queue.WriteResult(address + " " + result)
+	queue.WriteResult(time.Now().Format(time.RFC3339) + " " + address + " " + result)
 }
