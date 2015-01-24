@@ -6,7 +6,7 @@ import (
 
 	"flag"
 
-	"github.com/goffee/web"
+	"github.com/gophergala/goffee/web"
 )
 
 var webMode bool
