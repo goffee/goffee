@@ -13,6 +13,7 @@ import (
 var db gorm.DB
 
 type Check struct {
+	Id  int64
 	URL string
 }
 
@@ -32,4 +33,15 @@ func InitDatabase() (err error) {
 	db.AutoMigrate(&Check{}, &Result{})
 
 	return nil
+}
+
+func (c Check) Create() error {
+	r := db.Create(c)
+	return r.Error
+}
+
+func Checks() ([]Check, error) {
+	checks := []Check{}
+	r := db.Find(&checks)
+	return checks, r.Error
 }
