@@ -1,6 +1,12 @@
 {{define "body"}}
 <div class="checks-header">
   <h1>Let's add a new check!</h1>
+
+  <ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/checks">Checks</a></li>
+    <li class="active">Create new check</li>
+  </ol>
 </div>
 
 <form action="/checks" method="POST">
