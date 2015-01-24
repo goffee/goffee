@@ -33,7 +33,7 @@ func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
 
 // StartServer starts the web server
 func StartServer() {
-	goji.Use(gojistatic.Static("public", gojistatic.StaticOptions{SkipLogging: true}))
+	goji.Use(gojistatic.Static("web/public", gojistatic.StaticOptions{SkipLogging: true}))
 	goji.Use(SessionMiddleware)
 
 	goji.Get("/", controllers.Home)
