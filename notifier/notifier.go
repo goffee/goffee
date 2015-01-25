@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/keighl/mandrill"
 	"github.com/gophergala/goffee/data"
 	"github.com/gophergala/goffee/queue"
-	"github.com/keighl/mandrill"
 )
 
 var (

@@ -51,6 +51,11 @@
 			"Rev": "233ade3890238ecca6efa41d94a70d89df132ed6"
 		},
 		{
+			"ImportPath": "github.com/keighl/mandrill",
+			"Comment": "0.0.3-1-g2562312",
+			"Rev": "2562312097c4c50a6bbab7d9f374d09a3756fe9c"
+		},
+		{
 			"ImportPath": "github.com/lib/pq",
 			"Comment": "go1.0-cutoff-20-g308412e",
 			"Rev": "308412e3e54d78c6411b1d5ef52c0660b921c81b"
