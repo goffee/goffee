@@ -62,3 +62,7 @@ body {
 #home-thumbnails .caption {
   min-height: 152px;
 }
+
+.country-name {
+  vertical-align: middle;
+}
