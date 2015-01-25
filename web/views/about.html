@@ -12,6 +12,7 @@
 
 <div class="row">
   <div class="col-md-10">
+    <h4>Goffee is mostly written in Go!</h4>
     <h3>Libraries, Frameworks, and other third-party components</h3>
     <p>
       The web UI is built on top of Goji and go templates. For templating we
@@ -53,11 +54,9 @@
 <div class="row" id="diagram">
   <div class="col-md-10">
     <h3>Diagram of the components</h3>
-    <p>
-      Goffee is gosted on the Google Cloud Platform, using the Google Container
-      Engine service. The web UI is fronted by Cloudflare. In addition to this we
-      also have an IP reflector service hosted on Heroku.
-    </p>
+    <div class="col-md-12">
+      <img src="/images/goffee-diagram.svg" onerror="this.onerror=null;this.src='/images/goffee-diagram.png'">
+    </div>
     <dl>
       <dt>Tor</dt>
       <dd>
@@ -66,20 +65,20 @@
         the checked sites from multiple geographical locations.
       </dd>
 
-      <dt>The Queue</dt>
+      <dt>The Queue <span class="gosticker gocolor">GO</span></dt>
       <dd>
         The Queue is used for coordination betweent the different end points. The
         actual data for the queue is stored in a Redis key-value store.
       </dd>
 
-      <dt>The Probes</dt>
+      <dt>The Probes <span class="gosticker gocolor">GO</span></dt>
       <dd>
-        The Probes take jobs off the queue which tell them what URl needs to be
-        checked via Tor. The results from these checks are placed back on the
+        The Probes take jobs off the queue which tell them what URL needs to be
+        checked via Tor. The results from these checks are placed back on a
         queue for the Writer.
       </dd>
 
-      <dt>The Scheduler</dt>
+      <dt>The Scheduler <span class="gosticker gocolor">GO</span></dt>
       <dd>
         The Scheduler places jobs on to the queue on a fixed schedule (about
         once per minute per check). Using the scheduler and Queue we can ensure
@@ -87,34 +86,31 @@
         the same URL.
       </dd>
 
-      <dt>The Writer</dt>
+      <dt>The Writer <span class="gosticker gocolor">GO</span></dt>
       <dd>
-        The Writer pops results off the queue and writes them to the Database.
+        The Writer pops results off a queue and writes them to the Database.
         If there has been a change of state (success to failure, or failure to
         success) a job is added on the Queue for the Notifier.
       </dd>
 
-      <dt>The Notifier</dt>
+      <dt>The Notifier <span class="gosticker gocolor">GO</span></dt>
       <dd>
-        The Notifier pops botifications off the Queue and send the notifications
+        The Notifier pops botifications off the Queue and sends the notifications
         to the owners of the checks. Currently only email notifications are
         supported, but in the future it would be possible to add, for example,
         SMS notifications.
       </dd>
 
       <dt>The Database</dt>
-      <dd>The checks and their results are store in a MySQL database.</dd>
+      <dd>The checks and their results are stored in a MySQL database.</dd>
 
-      <dt>Web UI</dt>
+      <dt>Web UI <span class="gosticker gocolor">GO</span> <span class="gosticker htmlcolor">HTML</span> <span class="gosticker jscolor">Javascript</span></dt>
       <dd>
         The Web UI displays checks and results from the MySQL database and
         presents it to the users. Users can add new checks to the database via
         the Web UI.
       </dd>
     </dl>
-  </div>
-  <div class="col-md-12">
-    <img src="/images/goffee-diagram.svg" onerror="this.onerror=null;this.src='/images/goffee-diagram.png'">
   </div>
 </div>
 
