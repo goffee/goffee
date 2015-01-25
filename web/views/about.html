@@ -8,35 +8,19 @@
   <h1>
     How is Goffee Made?
   </h1>
+  <h4>Goffee is mostly written in Go!</h4>
 </div>
 
 <div class="row">
-  <div class="col-md-10">
-    <h4>Goffee is mostly written in Go!</h4>
-    <h3>Libraries, Frameworks, and other third-party components</h3>
+  <div class="col-md-6">
+    <h3>Libraries, Frameworks, and other 3rd components</h3>
     <p>
       The web UI is built on top of Goji and go templates. For templating we
       elected to use Go HTML templates. The site styles are based on Bootstrap 3
       and the Superhero theme from Bootswatch. Client-side templates are rendered
       with Handlebars.js.
     </p>
-    <ul>
-      <li>Go 1.4</li>
-      <li>Tor 0.2.5</li>
-      <li>Web Framework: Goji</li>
-      <li>ORM: GORM</li>
-      <li>HTML templates: Go templates</li>
-      <li>Web UI styles: Bootstrap 3 &amp; the Superhero theme from Bootswatch</li>
-      <li>Client side JS: jQuery, Moment.js, Happy.js, Handlebars.js</li>
-      <li>KV-Store: Redis</li>
-      <li>Database: MySQL</li>
-      <li>Signins: OAuth 2 &amp; GitHub</li>
-    </ul>
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-md-10">
     <h3>Hosting</h3>
     <p>
       Goffee is gosted on the Google Cloud Platform, using the Google Container
@@ -49,6 +33,23 @@
       Redis, and the Tor daemon, all the components ship as a single package
       (which can be run in different modes).
     </p>
+  </div>
+
+  <div class="col-md-6">
+    <div class="well">
+      <ul>
+        <li>Go 1.4</li>
+        <li>Tor 0.2.5</li>
+        <li>Web Framework: Goji</li>
+        <li>ORM: GORM</li>
+        <li>HTML templates: Go templates</li>
+        <li>Web UI styles: Bootstrap 3 &amp; the Superhero theme from Bootswatch</li>
+        <li>Client side JS: jQuery, Moment.js, Happy.js, Handlebars.js</li>
+        <li>KV-Store: Redis</li>
+        <li>Database: MySQL</li>
+        <li>Signins: OAuth 2 &amp; GitHub</li>
+      </ul>
+    </div>
   </div>
 </div>
 
