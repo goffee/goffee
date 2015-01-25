@@ -10,7 +10,7 @@ var (
 	pool *redis.Pool
 )
 
-const batchSize = 10
+const batchSize = 250
 const timeout = 5
 
 func InitQueue(redisServer string) {
