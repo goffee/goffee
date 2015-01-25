@@ -96,43 +96,47 @@ var updateResults = function() {
   }
 
   $.getJSON(url, function(data, status, xhr) {
-    $.map(data, function(item, index) {
-      item.URL = checkURL;
+    if (!data) {
+      setTimeout(updateResults, 20*1000);
+    } else {
+      $.map(data, function(item, index) {
+        item.URL = checkURL;
 
-      if ($.inArray(item.Country, flagCountries) > 0) {
-        item.Flag = "/images/flags/" + item.Country + ".png"
-      } else {
-        item.Flag = "/images/flags/_unknown.png"
-      }
+        if ($.inArray(item.Country, flagCountries) > 0) {
+          item.Flag = "/images/flags/" + item.Country + ".png"
+        } else {
+          item.Flag = "/images/flags/_unknown.png"
+        }
 
-      if (item.Success) {
-        item.Icon = "glyphicon-ok";
-        item.TextStatus = "OK"
-        item.CSSclass = "default"
-        item.PanelCSSclass = "panel-success"
-      } else if (item.status < 100) {
-        item.Icon = "glyphicon-warning-sign";
-        item.TextStatus = "Warning"
-        item.CSSclass = "warning"
-        item.PanelCSSclass = "panel-warning"
-      } else {
-        item.Icon = "glyphicon-fire";
-        item.TextStatus = "Fail!"
-        item.CSSclass = "danger"
-        item.PanelCSSclass = "panel-danger"
-      }
-      return item
-    });
+        if (item.Success) {
+          item.Icon = "glyphicon-ok";
+          item.TextStatus = "OK"
+          item.CSSclass = "default"
+          item.PanelCSSclass = "panel-success"
+        } else if (item.status < 100) {
+          item.Icon = "glyphicon-warning-sign";
+          item.TextStatus = "Warning"
+          item.CSSclass = "warning"
+          item.PanelCSSclass = "panel-warning"
+        } else {
+          item.Icon = "glyphicon-fire";
+          item.TextStatus = "Fail!"
+          item.CSSclass = "danger"
+          item.PanelCSSclass = "panel-danger"
+        }
+        return item
+      });
 
-    var html = template({"Results": data});
-    $resultsContainer.html(html);
-    dateRelativityApplicator($resultsContainer);
+      var html = template({"Results": data});
+      $resultsContainer.html(html);
+      dateRelativityApplicator($resultsContainer);
 
-    var latestHtml = latestTemplate(data[0]);
-    $latestContainer.html(latestHtml);
-    dateRelativityApplicator($latestContainer);
+      var latestHtml = latestTemplate(data[0]);
+      $latestContainer.html(latestHtml);
+      dateRelativityApplicator($latestContainer);
 
-    setTimeout(updateResults, 30*1000);
+      setTimeout(updateResults, 30*1000);
+    }
   });
 }
 
