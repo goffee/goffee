@@ -1,1 +1,46 @@
-# goffee
+# Goffee: Global uptime monitoring via Tor
+
+<https://goffee.io>
+
+Written in Go, Goffee is a fast, concurrent way to monitor your sites from all over the World.
+
+* **Worldwide monitoring:** By periodically changing Tor exit nodes, Goffee checks that your site is up from all over the world.
+* **Powered by Gophers:** Actual, real life gophers on little treadmills, working hard to make sure that your site is up.
+* **Monitor .onion sites:** Since all checks are run over the Tor network you can also use Goffee to monitor the uptime of .onion sites.
+
+Goffee can monitor both your normal web applications and Tor network .onion sites.
+
+## Tech
+
+* Go 1.4
+* Tor 0.2.5
+* Web Framework: Goji
+* ORM: GORM
+* HTML templates: Go templates
+* Web UI styles: Bootstrap 3 & the Superhero theme from Bootswatch
+* Client side JS: jQuery, Moment.js, Happy.js, Handlebars.js
+* KV-Store: Redis
+* Database: MySQL
+* Signins: OAuth 2 & GitHub
+
+More details: <https://goffee.io/about>
+
+## How to use?
+
+**COMING SOON!!**
+
+Goffee was written for the [Gopher Gala](http://gophergala.com/) in 48 hours, so we've been a bit rushed.
+
+Once we have some time (and sleep), we'll write up some proper documentation.
+
+In the meanwhile, enjoy the code and please vote for us!
+
+## License and Copyright
+
+Copyright (c) 2015 Joao Cardoso, Matias Korhonen, and Stephen Sykes
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
