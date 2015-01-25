@@ -73,6 +73,11 @@ func (u *User) Checks() (checks []Check, err error) {
 	return checks, res.Error
 }
 
+func (u *User) ChecksCount() (count int, err error) {
+	res := db.Model(Check{}).Where("user_id = ?", u.Id).Count(&count)
+	return count, res.Error
+}
+
 func (u *User) Check(id int64) (check Check, err error) {
 	res := db.Where("user_id = ? and id = ?", u.Id, id).First(&check)
 	return check, res.Error

@@ -37,15 +37,19 @@ func ChecksIndex(c web.C, w http.ResponseWriter, req *http.Request) {
 
 // NewCheck renders the new check form
 func NewCheck(c web.C, w http.ResponseWriter, req *http.Request) {
-	if !helpers.UserSignedIn(c) {
+	user, err := helpers.CurrentUser(c)
+
+	if err != nil {
 		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
+	checksCount, err := user.ChecksCount()
+
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/new_check.html")
 	csrf := nosurf.Token(req)
-	err := render.Template(c, w, req, templates, "layout", map[string]interface{}{"Title": "New Check", "CSRFToken": csrf})
+	err = render.Template(c, w, req, templates, "layout", map[string]interface{}{"Title": "New Check", "CSRFToken": csrf, "ChecksCount": checksCount})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -57,6 +61,20 @@ func CreateCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
+		return
+	}
+
+	checksCount, err := user.ChecksCount()
+	if err != nil {
+		renderError(c, w, req, "Something went wrong", http.StatusInternalServerError)
+		return
+	}
+
+	if checksCount >= 5 {
+		session := helpers.CurrentSession(c)
+		session.AddFlash("You have too many checks in use, delete some to add more.")
+		session.Save(req, w)
+		http.Redirect(w, req, "/checks", http.StatusSeeOther)
 		return
 	}
 
