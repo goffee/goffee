@@ -6,6 +6,7 @@ import (
 
 	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
 	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2/github"
+	"github.com/gophergala/goffee/data"
 	"github.com/gophergala/goffee/notifier"
 	"github.com/gophergala/goffee/probe"
 	"github.com/gophergala/goffee/queue"
@@ -78,6 +79,10 @@ func main() {
 
 	if probeMode || schedulerMode || writerMode || notifierMode {
 		queue.InitQueue(redisAddress)
+	}
+
+	if webMode || schedulerMode || writerMode || notifierMode {
+		data.InitDatabase()
 	}
 
 	if probeMode {

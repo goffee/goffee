@@ -10,7 +10,6 @@ import (
 	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/graceful"
 	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
 	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web/middleware"
-	"github.com/gophergala/goffee/data"
 	"github.com/gophergala/goffee/web/controllers"
 )
 
@@ -35,8 +34,6 @@ func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
 
 // StartServer starts the web server
 func StartServer(bind string) {
-	data.InitDatabase()
-
 	secureMiddleware := secure.New(secure.Options{
 		AllowedHosts:       []string{"example.com", "ssl.example.com"},
 		FrameDeny:          true,

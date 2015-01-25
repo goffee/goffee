@@ -14,8 +14,6 @@ func Run() {
 }
 
 func run() {
-	data.InitDatabase()
-
 	if checks, err := data.Checks(); err == nil {
 		scheduleChecks(checks)
 	}

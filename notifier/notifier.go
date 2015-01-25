@@ -21,7 +21,6 @@ func Run() {
 }
 
 func run() {
-	data.InitDatabase()
 	mandrillClient = mandrill.ClientWithKey(MandrillKey)
 
 	for {

@@ -16,8 +16,6 @@ func Run() {
 }
 
 func run() {
-	data.InitDatabase()
-
 	for {
 		results := queue.FetchResults()
 		for _, r := range results {
