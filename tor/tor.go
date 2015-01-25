@@ -9,8 +9,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/hailiang/gosocks"
 	"time"
+
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/hailiang/gosocks"
 )
 
 // Your torrc should have these lines
@@ -28,7 +29,7 @@ func prepareProxyClient() *http.Client {
 
 func httpGet(httpClient *http.Client, url string) (resp *http.Response, err error) {
 	req, err := http.NewRequest("GET", url, nil)
-	req.Header.Set("User-Agent", "curl/7.21.4 (universal-apple-darwin11.0) libcurl/7.21.4 OpenSSL/0.9.8x zlib/1.2.5")
+	req.Header.Set("User-Agent", "Goffee-Probe/1.0 (+https://goffee.io)")
 	resp, err = httpClient.Do(req)
 	return
 }
