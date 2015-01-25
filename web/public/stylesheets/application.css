@@ -12,6 +12,10 @@ body {
   padding: 40px 0px;
 }
 
+.flag {
+  width: 24px;
+}
+
 .home-header h1 {
   font-size: 64px;
 }
