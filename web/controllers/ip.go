@@ -18,8 +18,7 @@ func IP(w http.ResponseWriter, req *http.Request) {
 
 	host, _, err := net.SplitHostPort(req.RemoteAddr)
 	if err != nil {
-		render.JSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
-		return
+		host = req.RemoteAddr
 	}
 
 	// If you are using strings that may be invalid, check that ip is not nil
