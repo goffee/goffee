@@ -73,7 +73,7 @@ func main() {
 	}
 
 	if probeMode || schedulerMode || writerMode || notifierMode {
-		queue.RedisAddressWithPort = redisAddress
+		queue.InitQueue(redisAddress)
 	}
 
 	if probeMode {
