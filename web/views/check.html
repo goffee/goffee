@@ -1,12 +1,12 @@
 {{{define "body"}}}
+  <ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/checks">Checks</a></li>
+    <li class="active">{{{.Check.URL}}}</li>
+  </ol>
+
   <div class="checks-header">
     <h1>Check details</h1>
-
-    <ol class="breadcrumb">
-      <li><a href="/">Home</a></li>
-      <li><a href="/checks">Checks</a></li>
-      <li class="active">{{{.Check.URL}}}</li>
-    </ol>
   </div>
 
   <div class="row">
