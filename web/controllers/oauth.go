@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"flag"
+	"log"
 	"net/http"
 
 	"github.com/google/go-github/github"
@@ -12,11 +14,27 @@ import (
 	oauth2github "golang.org/x/oauth2/github"
 )
 
-var conf = &oauth2.Config{
-	ClientID:     "508322171059309cedad",
-	ClientSecret: "8cb47d06cc58c8bc2b4c0d01b870d117cf086c40",
-	Scopes:       []string{},
-	Endpoint:     oauth2github.Endpoint,
+var conf *oauth2.Config
+
+func init() {
+	var gitHubClientID string
+	var gitHubClientSecret string
+
+	flag.StringVar(&gitHubClientID, "clientid", "", "Github client ID")
+	flag.StringVar(&gitHubClientSecret, "secret", "", "GitHub client Secret")
+
+	flag.Parse()
+
+	if gitHubClientID == "" || gitHubClientSecret == "" {
+		log.Fatal("No clientid or secret set!")
+	}
+
+	conf = &oauth2.Config{
+		ClientID:     "508322171059309cedad",
+		ClientSecret: "8cb47d06cc58c8bc2b4c0d01b870d117cf086c40",
+		Scopes:       []string{},
+		Endpoint:     oauth2github.Endpoint,
+	}
 }
 
 // OAuthAuthorize makes the user login
@@ -41,7 +59,7 @@ func OAuthCallback(c web.C, w http.ResponseWriter, req *http.Request) {
 	// Exchange the received code for a token
 	token, err := conf.Exchange(oauth2.NoContext, code)
 	if err != nil {
-		renderError(c, w, req,"Authentication failed", http.StatusUnauthorized)
+		renderError(c, w, req, "Authentication failed", http.StatusUnauthorized)
 		return
 	}
 
@@ -52,7 +70,7 @@ func OAuthCallback(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, _, err := githubClient.Users.Get("")
 
 	if err != nil {
-		renderError(c, w, req,"Authentication failed", http.StatusUnauthorized)
+		renderError(c, w, req, "Authentication failed", http.StatusUnauthorized)
 		return
 	}
 
