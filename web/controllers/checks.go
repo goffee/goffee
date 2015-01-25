@@ -98,10 +98,39 @@ func ShowCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	csrf := nosurf.Token(req)
+
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/check.html")
-	err = render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "Check: " + check.URL, "Check": check})
+	err = render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "Check: " + check.URL, "Check": check, "CSRFToken": csrf})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+// DeleteCheck deletes a single check
+func DeleteCheck(c web.C, w http.ResponseWriter, req *http.Request) {
+	// user, err := helpers.CurrentUser(c)
+	//
+	// if err != nil {
+	// 	renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
+	// 	return
+	// }
+
+	// checkId, err := strconv.ParseInt(c.URLParams["id"], 10, 64)
+	// if err != nil {
+	// 	renderError(c, w, "Check not found", http.StatusNotFound)
+	// 	return
+	// }
+	//
+	// check, err := user.Check(checkId)
+	//
+	// if err != nil {
+	// 	renderError(c, w, "Check not found", http.StatusNotFound)
+	// 	return
+	// }
+
+	// check.Delete()
+
+	http.Redirect(w, req, "/checks", http.StatusSeeOther)
 }

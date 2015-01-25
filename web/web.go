@@ -63,6 +63,7 @@ func StartServer(bind string) {
 	m.Get("/checks", controllers.ChecksIndex)
 	m.Get("/checks/new", controllers.NewCheck)
 	m.Get("/checks/:id", controllers.ShowCheck)
+	m.Post("/checks/:id/delete", controllers.DeleteCheck)
 	m.Post("/checks", controllers.CreateCheck)
 
 	m.Get("/checks/:check_id/results", controllers.ResultsIndex)

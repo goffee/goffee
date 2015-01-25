@@ -81,6 +81,20 @@ $(function() {
     });
   }
 
+  $("#delete-check-form").on("submit", function(event){
+    $button = $(this).find("button");
+    if ($button.data("state") == "unarmed") {
+      event.preventDefault()
+      $button.data("state", "armed")
+      $button.find("[data-role=label]").text("Are you sure?");
+      setTimeout(function() {
+        $button.data("state", "unarmed")
+        $button.find("[data-role=label]").text("Destroy");
+        $button.blur()
+      }, 5000)
+    }
+  });
+
   var $resultsContainer = $("#results-container");
   if ($resultsContainer.length) {
     var source = $("#results-template").html();
