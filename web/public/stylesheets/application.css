@@ -17,7 +17,7 @@ body {
 }
 
 #homepic {
-  margin-top: 40px;
+  margin-top: 32px;
   max-width: 100%;
   max-height: 305px;
 }
@@ -33,6 +33,7 @@ body {
 
 @media (max-width: 600px) {
   .home-header h1 {
+    margin-top: 0px;
     font-size: 40px;
   }
 
@@ -40,10 +41,12 @@ body {
     font-size: 16px;
     margin-top: 50px;
   }
+
+  #homepic {
+    margin-top: 20px;
+    max-height: 252px;
+  }
 }
-
-
-
 
 .modal-body img {
   display: block;
