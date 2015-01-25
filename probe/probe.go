@@ -16,6 +16,8 @@ import (
 const ipReflector = "http://stephensykes.com/ip_reflection.html"
 
 var exit = make(chan bool)
+var currentIP string
+var lastIPChange time.Time
 
 func Run() {
 	go run()
@@ -23,22 +25,23 @@ func Run() {
 
 func run() {
 	var wg sync.WaitGroup
+	newip()
 
 	for { // ever
 		fmt.Println("Redis fetch")
 		batch := queue.FetchBatch()
 		fmt.Println(batch)
 		for _, item := range batch {
-			if item == "newip" {
-				wg.Wait()
-				newip()
-			} else {
-				wg.Add(1)
-				go check(item, &wg)
-			}
+			wg.Add(1)
+			go check(item, &wg)
 		}
 
 		wg.Wait()
+		
+		if time.Since(lastIPChange) > time.Minute {
+			newip()
+		}
+		
 	}
 }
 
@@ -51,7 +54,9 @@ func newip() {
 	} else {
 		result = body
 	}
-	queue.WriteResult(time.Now().Format(time.RFC3339) + " newip " + result)
+	currentIP = result
+	fmt.Println("New IP obtained " + result)
+	lastIPChange = time.Now()
 }
 
 func check(address string, wg *sync.WaitGroup) {
@@ -74,6 +79,7 @@ func check(address string, wg *sync.WaitGroup) {
 		Status:    statusCode,
 		Success:   statusCode >= 200 && statusCode < 300,
 		URL:       address,
+		IP:        currentIP,
 	}
 
 	data, err := json.Marshal(result)
