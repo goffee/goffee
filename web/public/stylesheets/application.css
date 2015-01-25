@@ -1,3 +1,28 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  text-align: center;
+}
+
+.footer a {
+  color:
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
 body {
   padding-top: 50px;
 }
@@ -64,5 +89,14 @@ body {
 }
 
 .country-name {
+  vertical-align: middle;
+}
+
+#github-button img {
+  width: 32px;
+  height: 32px;
+}
+
+#github-button .text {
   vertical-align: middle;
 }
