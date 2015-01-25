@@ -50,6 +50,9 @@ func InitDatabase() (err error) {
 
 	db.AutoMigrate(&Check{}, &Result{}, &User{})
 
+	db.Model(&User{}).AddIndex("idx_user_github_id", "github_id")
+	db.Model(&Check{}).AddIndex("idx_check_id_user_id", "id", "user_id")
+
 	return nil
 }
 
