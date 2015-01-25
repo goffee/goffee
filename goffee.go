@@ -41,22 +41,6 @@ func init() {
 
 	flag.Parse()
 
-	if gitHubClientID == "" || gitHubClientSecret == "" {
-		log.Fatal("No GitHub clientid or secret set!")
-	}
-
-	if mandrillKey == "" {
-		log.Fatal("No Mandrill API key set!")
-	}
-	notifier.MandrillKey = mandrillKey
-
-	controllers.OAuthConf = &oauth2.Config{
-		ClientID:     gitHubClientID,
-		ClientSecret: gitHubClientSecret,
-		Scopes:       []string{},
-		Endpoint:     github.Endpoint,
-	}
-
 	// If no mode has been defined, just launch them all!
 	if !webMode && !probeMode && !schedulerMode && !writerMode && !notifierMode {
 		webMode = true
@@ -64,6 +48,26 @@ func init() {
 		schedulerMode = true
 		writerMode = true
 		notifierMode = true
+	}
+
+	if notifierMode {
+		if mandrillKey == "" {
+			log.Fatal("No Mandrill API key set!")
+		}
+		notifier.MandrillKey = mandrillKey
+	}
+
+	if webMode {
+		if gitHubClientID == "" || gitHubClientSecret == "" {
+			log.Fatal("No GitHub clientid or secret set!")
+		}
+
+		controllers.OAuthConf = &oauth2.Config{
+			ClientID:     gitHubClientID,
+			ClientSecret: gitHubClientSecret,
+			Scopes:       []string{},
+			Endpoint:     github.Endpoint,
+		}
 	}
 }
 
