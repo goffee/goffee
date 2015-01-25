@@ -30,8 +30,8 @@ func init() {
 	}
 
 	conf = &oauth2.Config{
-		ClientID:     "508322171059309cedad",
-		ClientSecret: "8cb47d06cc58c8bc2b4c0d01b870d117cf086c40",
+		ClientID:     gitHubClientID,
+		ClientSecret: gitHubClientSecret,
 		Scopes:       []string{},
 		Endpoint:     oauth2github.Endpoint,
 	}
