@@ -101,7 +101,7 @@ func (c *Check) AddResult(r *Result) error {
 }
 
 func (c *Check) Results() (results []Result, err error) {
-	res := db.Model(c).Related(&results)
+	res := db.Model(c).Order("id desc").Limit(120).Related(&results)
 	return results, res.Error
 }
 
