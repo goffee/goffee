@@ -4,6 +4,7 @@ import (
 	"flag"
 	"log"
 
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/gorilla/sessions"
 	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
 	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2/github"
 	"github.com/gophergala/goffee/data"
@@ -29,6 +30,7 @@ func init() {
 	var gitHubClientID string
 	var gitHubClientSecret string
 	var mandrillKey string
+	var sessionSecret string
 
 	flag.BoolVar(&webMode, "webmode", false, "Run goffee in webmode")
 	flag.BoolVar(&probeMode, "torfetch", false, "Fetch something via Tor")
@@ -41,6 +43,7 @@ func init() {
 	flag.StringVar(&gitHubClientSecret, "secret", "", "GitHub client Secret")
 	flag.StringVar(&mandrillKey, "mandrill", "", "Mandrill API key")
 	flag.StringVar(&mysql, "mysql", "", "MySQL connection string")
+	flag.StringVar(&sessionSecret, "sessionsecret", "", "The session secret for the web UI")
 
 	flag.Parse()
 
@@ -71,6 +74,12 @@ func init() {
 			Scopes:       []string{},
 			Endpoint:     github.Endpoint,
 		}
+
+		if sessionSecret == "" {
+			log.Fatal("No session secret set!")
+		}
+
+		web.SessionStore = sessions.NewCookieStore([]byte(sessionSecret))
 	}
 }
 

@@ -13,14 +13,14 @@ import (
 	"github.com/gophergala/goffee/web/controllers"
 )
 
-var store = sessions.NewCookieStore([]byte("something-very-secret"))
+var SessionStore *sessions.CookieStore
 
 // SessionMiddleware adds session support to Goffee
 func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		// Get a session. We're ignoring the error resulted from decoding an
 		// existing session: Get() always returns a session, even if empty.
-		session, _ := store.Get(r, "goffee-session")
+		session, _ := SessionStore.Get(r, "goffee-session")
 
 		// Save it.
 		session.Save(r, w)
