@@ -99,13 +99,11 @@ var updateResults = function() {
     $.map(data, function(item, index) {
       item.URL = checkURL;
 
-
       if ($.inArray(item.Country, flagCountries) > 0) {
         item.Flag = "/images/flags/" + item.Country + ".png"
       } else {
         item.Flag = "/images/flags/_unknown.png"
       }
-      console.log(item.Flag)
 
       if (item.Success) {
         item.Icon = "glyphicon-ok";

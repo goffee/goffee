@@ -61,12 +61,8 @@
               <span class="glyphicon {{Icon}}">&nbsp;{{TextStatus}}</span>
             </td>
             <td>
-              <img class="flag" src="{{Flag}}" alt="{{Country}}">
-              {{#if Country}}
-                {{Country}}
-              {{else}}
-                Unknown
-              {{/if}}
+              <img class="flag" src="{{Flag}}" alt="{{CountryName}}">
+              {{CountryName}}
             </td>
           </tr>
         {{/each}}
