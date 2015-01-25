@@ -196,4 +196,18 @@ $(function() {
 
     $modal.modal("show");
   });
+
+  $('.equal').equalize({
+    reset: true,
+    children: ".panel"
+  });
+
+  setTimeout(function() {
+    $(window).resize(function() {
+      $('.equal').equalize({
+        reset: true,
+        children: ".panel"
+      });
+    });
+  }, 500);
 });
