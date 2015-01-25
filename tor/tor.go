@@ -8,7 +8,6 @@ import (
 	"net"
 	"net/http"
 	"strings"
-
 	"time"
 
 	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/hailiang/gosocks"
