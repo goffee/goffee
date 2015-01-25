@@ -47,7 +47,7 @@ func run() {
 }
 
 func sendMessage(c data.Check, u data.User) {
-	println("SENDING!!!")
+	println("Notifying via email: " + u.Email)
 
 	var subject string
 
