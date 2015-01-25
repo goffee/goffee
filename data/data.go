@@ -26,6 +26,7 @@ type Result struct {
 	Status    int
 	Success   bool
 	IP        string `gorm:"column:ip"`
+	Country   string
 	CheckId   int64
 
 	URL string `sql:"-"`

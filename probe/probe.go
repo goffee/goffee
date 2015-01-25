@@ -13,13 +13,19 @@ import (
 	"github.com/gophergala/goffee/tor"
 )
 
-const ipReflector = "http://stephensykes.com/ip_reflection.html"
+const ipReflector = "http://goffee.io/ip"
 const ipRefreshInterval = 5 * time.Minute
 
+type IPResponse struct {
+	IP      string
+	Country string
+}
+
 var (
-	exit         = make(chan bool)
-	lastIPChange time.Time
-	currentIP    string
+	exit           = make(chan bool)
+	lastIPChange   time.Time
+	currentIP      string
+	currentCountry string
 )
 
 func Run() {
@@ -50,14 +56,16 @@ func run() {
 func newip() {
 	tor.NewIP()
 	body, err := tor.TorGet(ipReflector)
-	var result string
 	if err != nil {
-		result = err.Error()
-	} else {
-		result = body
+		return
 	}
-	currentIP = result
-	fmt.Println("New IP obtained " + result)
+	var response IPResponse
+	err = json.Unmarshal([]byte(body), &response)
+	if err != nil {
+		return
+	}
+	currentIP = response.IP
+	currentCountry = response.Country
 	lastIPChange = time.Now()
 }
 
@@ -82,6 +90,7 @@ func check(address string, wg *sync.WaitGroup) {
 		Success:   statusCode >= 200 && statusCode < 300,
 		URL:       address,
 		IP:        currentIP,
+		Country:   currentCountry,
 	}
 
 	data, err := json.Marshal(result)
