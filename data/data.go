@@ -44,8 +44,8 @@ type User struct {
 	OAuthToken  string `gorm:"column:oauth_token"`
 }
 
-func InitDatabase() (err error) {
-	db, err = gorm.Open("sqlite3", "/tmp/goffee.db")
+func InitDatabase(dialect string, args ...interface{}) (err error) {
+	db, err = gorm.Open(dialect, args...)
 	if err != nil {
 		return err
 	}

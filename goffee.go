@@ -23,6 +23,7 @@ var writerMode bool
 var notifierMode bool
 var redisAddress string
 var bind string
+var mysql string
 
 func init() {
 	var gitHubClientID string
@@ -39,6 +40,7 @@ func init() {
 	flag.StringVar(&gitHubClientID, "clientid", "", "Github client ID")
 	flag.StringVar(&gitHubClientSecret, "secret", "", "GitHub client Secret")
 	flag.StringVar(&mandrillKey, "mandrill", "", "Mandrill API key")
+	flag.StringVar(&mysql, "mysql", "", "MySQL connection string")
 
 	flag.Parse()
 
@@ -82,7 +84,11 @@ func main() {
 	}
 
 	if webMode || schedulerMode || writerMode || notifierMode {
-		data.InitDatabase()
+		if mysql != "" {
+			data.InitDatabase("mysql", mysql)
+		} else {
+			data.InitDatabase("sqlite3", "/tmp/goffee.db")
+		}
 	}
 
 	if probeMode {
