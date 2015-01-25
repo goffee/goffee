@@ -111,8 +111,22 @@ func (c *Check) User() (user User, err error) {
 }
 
 func (c *Check) Delete() (err error) {
-	res := db.Delete(c)
-	return res.Error
+	tx := db.Begin()
+
+	res := db.Where(&Result{CheckId: c.Id}).Delete(Result{})
+	if res.Error != nil {
+		tx.Rollback()
+		return res.Error
+	}
+
+	res = db.Delete(c)
+	if res.Error != nil {
+		tx.Rollback()
+		return res.Error
+	}
+
+	tx.Commit()
+	return nil
 }
 
 func (u *User) UpdateOrCreate() error {
