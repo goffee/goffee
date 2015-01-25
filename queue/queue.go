@@ -41,6 +41,31 @@ func WriteResult(result string) {
 	return
 }
 
+func AcquireSchedulerLock(interval, timeout int) bool {
+	c := pool.Get()
+	defer c.Close()
+
+	exists, err := redis.Bool(c.Do("EXISTS", "scheduler:last_run"))
+	if err != nil || exists {
+		return false
+	}
+
+	_, err = redis.String(c.Do("SET", "scheduler:lock", "LOCK", "NX", "EX", timeout))
+	if err != nil {
+		return false
+	}
+
+	c.Do("SET", "scheduler:last_run", time.Now().Format(time.RFC3339), "EX", interval)
+
+	return true
+}
+
+func ReleaseSchedulerLock() {
+	c := pool.Get()
+	defer c.Close()
+	c.Do("DEL", "scheduler:lock")
+}
+
 func listWrite(list, content string) {
 	c := pool.Get()
 	defer c.Close()

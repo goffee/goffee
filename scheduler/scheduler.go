@@ -14,21 +14,24 @@ func Run() {
 }
 
 func run() {
-	if checks, err := data.Checks(); err == nil {
-		scheduleChecks(checks)
-	}
+	scheduleChecks()
 
-	for range time.Tick(10 * time.Second) {
-		if checks, err := data.Checks(); err == nil {
-			scheduleChecks(checks)
-		}
+	for range time.Tick(5 * time.Second) {
+		scheduleChecks()
 	}
 }
 
-func scheduleChecks(checks []data.Check) {
-	for _, check := range checks {
-		queue.AddJob(check.URL)
+func scheduleChecks() {
+	if !queue.AcquireSchedulerLock(60, 300) {
+		return
 	}
+
+	if checks, err := data.Checks(); err == nil {
+		for _, check := range checks {
+			queue.AddJob(check.URL)
+		}
+	}
+	queue.ReleaseSchedulerLock()
 }
 
 func Wait() {
