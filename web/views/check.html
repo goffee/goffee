@@ -11,29 +11,21 @@
 
   <div class="row">
     <div class="col-md-10">
-      {{{with .Check}}}
-      <div id="latest-result-container" data-url="{{{.URL}}}">
-        <div class="panel {{{if .Success}}} panel-success {{{else if lt .Status 100}}} panel-warning {{{else}}} panel-danger {{{end}}}">
+      <div id="latest-result-container" data-url="{{{.Check.URL}}}">
+        <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
-              <span class="badge">
-                {{{if lt .Status 100}}}
-                Error
-                {{{else}}}
-                {{{.Status}}}
-                {{{end}}}
-              </span>
-              {{{.URL}}}
+              <span class="badge">…</span>
+              {{{.Check.URL}}}
             </h3>
           </div>
           <div class="panel-body">
             <p>
-              Last checked <time data-role="timeago" datetime="{{{formatTime .UpdatedAt}}}">{{{formatTime .UpdatedAt}}}</time>.&nbsp;
+              Loading…
             </p>
           </div>
         </div>
       </div>
-      {{{end}}}
     </div>
     <div class="col-md-2">
       <form action="/checks/{{{.Check.Id}}}/delete" method="POST" id="delete-check-form">
@@ -49,14 +41,6 @@
   <h2>Results</h2>
 
   <div id="results-container" data-uninitialized data-url="/checks/{{{.Check.Id}}}/results">No results yet</div>
-  <!-- type Result struct {
-    Id        int64
-    CreatedAt time.Time
-    Status    int
-    Success   bool
-    IP        string `gorm:"column:ip"`
-    CheckId   int64
-  } -->
 
   <script id="results-template" type="text/x-handlebars-template">
     <table class="table table-bordered">
@@ -97,6 +81,9 @@
             {{Status}}
           </span>
           {{URL}}
+          <a href="{{URL}}" aria-label="Open URL in new window" target="_blank">
+            <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
+          </a>
         </h3>
       </div>
       <div class="panel-body">
