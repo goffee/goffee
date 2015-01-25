@@ -56,6 +56,58 @@ var dateRelativityApplicator = function($selector) {
   });
 }
 
+var updateResults = function() {
+  var $resultsContainer = $("#results-container");
+  var $latestContainer = $("#latest-result-container");
+
+  var source = $("#results-template").html();
+  var template = Handlebars.compile(source);
+
+  var latestSource = $("#latest-result-template").html();
+  var latestTemplate = Handlebars.compile(latestSource);
+
+  var url = $resultsContainer.data("url");
+  var checkURL = $latestContainer.data("url");
+
+  if ($resultsContainer.data("uninitialized")) {
+    $resultsContainer.text("Loading…");
+  }
+
+  $.getJSON(url, function(data, status, xhr) {
+    $.map(data, function(item, index) {
+      item.URL = checkURL;
+
+      if (item.Success) {
+        item.Icon = "glyphicon-ok";
+        item.TextStatus = "OK"
+        item.CSSclass = "default"
+        item.PanelCSSclass = "panel-success"
+      } else if (item.status < 100) {
+        item.Icon = "glyphicon-warning-sign";
+        item.TextStatus = "Warning"
+        item.CSSclass = "warning"
+        item.PanelCSSclass = "panel-warning"
+      } else {
+        item.Icon = "glyphicon-fire";
+        item.TextStatus = "Fail!"
+        item.CSSclass = "danger"
+        item.PanelCSSclass = "panel-danger"
+      }
+      return item
+    });
+
+    var html = template({"Results": data});
+    $resultsContainer.html(html);
+    dateRelativityApplicator($resultsContainer);
+
+    var latestHtml = latestTemplate(data[0]);
+    $latestContainer.html(latestHtml);
+    dateRelativityApplicator($latestContainer);
+
+    setTimeout(updateResults, 30*1000);
+  });
+}
+
 $(function() {
   dateRelativityApplicator($("body"));
 
@@ -97,32 +149,6 @@ $(function() {
 
   var $resultsContainer = $("#results-container");
   if ($resultsContainer.length) {
-    var source = $("#results-template").html();
-    var template = Handlebars.compile(source);
-    var url = $resultsContainer.data("url");
-
-    $resultsContainer.text("Loading…")
-    $.getJSON(url, function(data, status, xhr) {
-      $.map(data, function(item, index) {
-        if (item.Success) {
-          item.Icon = "glyphicon-ok";
-          item.TextStatus = "OK"
-          item.CSSclass = "default"
-        } else if (item.status < 100) {
-          item.Icon = "glyphicon-warning-sign";
-          item.TextStatus = "Warning"
-          item.CSSclass = "warning"
-        } else {
-          item.Icon = "glyphicon-fire";
-          item.TextStatus = "Fail!"
-          item.CSSclass = "danger"
-        }
-        return item
-      });
-
-      var html = template({"Results": data});
-      $resultsContainer.html(html);
-      dateRelativityApplicator($resultsContainer);
-    });
+    updateResults()
   }
 });

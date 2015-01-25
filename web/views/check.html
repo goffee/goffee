@@ -12,27 +12,25 @@
   <div class="row">
     <div class="col-md-10">
       {{{with .Check}}}
-      <div class="panel {{{if .Success}}} panel-success {{{else if lt .Status 100}}} panel-warning {{{else}}} panel-danger {{{end}}}">
-        <div class="panel-heading">
-          <h3 class="panel-title">
-            <span class="badge">
-              {{{if lt .Status 100}}}
-              Error
-              {{{else}}}
-              {{{.Status}}}
-              {{{end}}}
-            </span>
-            {{{.URL}}}
-          </h3>
-        </div>
-        <div class="panel-body">
-          <p>
-            Last checked <time data-role="timeago" datetime="{{{formatTime .UpdatedAt}}}">{{{formatTime .UpdatedAt}}}</time>.&nbsp;
-            <a class="" href="/checks/{{{.Id}}}" role="button">
-              <span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span>
-              View details
-            </a>
-          </p>
+      <div id="latest-result-container" data-url="{{{.URL}}}">
+        <div class="panel {{{if .Success}}} panel-success {{{else if lt .Status 100}}} panel-warning {{{else}}} panel-danger {{{end}}}">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <span class="badge">
+                {{{if lt .Status 100}}}
+                Error
+                {{{else}}}
+                {{{.Status}}}
+                {{{end}}}
+              </span>
+              {{{.URL}}}
+            </h3>
+          </div>
+          <div class="panel-body">
+            <p>
+              Last checked <time data-role="timeago" datetime="{{{formatTime .UpdatedAt}}}">{{{formatTime .UpdatedAt}}}</time>.&nbsp;
+            </p>
+          </div>
         </div>
       </div>
       {{{end}}}
@@ -50,7 +48,7 @@
 
   <h2>Results</h2>
 
-  <div id="results-container" data-url="/checks/{{{.Check.Id}}}/results">No results yet</div>
+  <div id="results-container" data-uninitialized data-url="/checks/{{{.Check.Id}}}/results">No results yet</div>
   <!-- type Result struct {
     Id        int64
     CreatedAt time.Time
@@ -91,4 +89,21 @@
     </table>
   </script>
 
+  <script id="latest-result-template" type="text/x-handlebars-template">
+    <div class="panel {{PanelCSSclass}}">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <span class="badge">
+            {{Status}}
+          </span>
+          {{URL}}
+        </h3>
+      </div>
+      <div class="panel-body">
+        <p>
+          Last checked <time data-role="timeago" datetime="{{CreatedAt}}">{{CreatedAt}}</time>.&nbsp;
+        </p>
+      </div>
+    </div>
+  </script>
 {{{end}}}
