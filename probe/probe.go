@@ -2,6 +2,7 @@ package probe
 
 import (
 	"encoding/json"
+	"net/http"
 	"strconv"
 	"strings"
 	"sync"
@@ -78,6 +79,15 @@ func check(address string, wg *sync.WaitGroup) {
 		statusCode, err = strconv.Atoi(strings.Split(status, " ")[0])
 		if err != nil {
 			statusCode = -2
+		}
+	}
+
+	// If Tor fails, try locally.
+	if statusCode == -1 {
+		resp, err := http.Get(address)
+		if err == nil {
+			defer resp.Body.Close()
+			statusCode = resp.StatusCode
 		}
 	}
 
