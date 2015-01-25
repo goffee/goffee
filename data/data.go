@@ -106,6 +106,11 @@ func (c *Check) Results() (results []Result, err error) {
 	return results, res.Error
 }
 
+func (c *Check) Delete() (err error) {
+	res := db.Delete(c)
+	return res.Error
+}
+
 func (u *User) UpdateOrCreate() error {
 	res := db.Where(User{GitHubId: u.GitHubId}).Assign(*u).FirstOrInit(u)
 	if res.Error != nil {
