@@ -151,4 +151,17 @@ $(function() {
   if ($resultsContainer.length) {
     updateResults()
   }
+
+  $("[data-role=modal]").on("click", function(event){
+    event.preventDefault();
+    $this = $(this);
+
+    $img = $("<img>").attr("src", $this.attr("href"));
+    $body = $("<div class='modal-body'></div>").html($img);
+    $content = $("<div class='modal-content'></div>").html($body);
+    $dialog = $("<div class='modal-dialog modal-lg'></div>").html($content);
+    $modal = $("<div class='modal fade'></div>").html($dialog);
+
+    $modal.modal("show");
+  });
 });
