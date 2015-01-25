@@ -3,11 +3,9 @@ package data
 import (
 	"time"
 
-	"github.com/jinzhu/gorm"
-
-	// DB adapters
-	_ "github.com/lib/pq"
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/jinzhu/gorm"
+	_ "github.com/gophergala/goffee/Godeps/_workspace/src/github.com/lib/pq"
+	_ "github.com/gophergala/goffee/Godeps/_workspace/src/github.com/mattn/go-sqlite3" // DB adapters
 )
 
 var db gorm.DB

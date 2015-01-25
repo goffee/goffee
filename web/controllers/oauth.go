@@ -5,13 +5,13 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/google/go-github/github"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/google/go-github/github"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/gorilla/sessions"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
+	oauth2github "github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2/github"
 	"github.com/gophergala/goffee/data"
 	"github.com/gophergala/goffee/web/helpers"
-	"github.com/gorilla/sessions"
-	"github.com/zenazn/goji/web"
-	"golang.org/x/oauth2"
-	oauth2github "golang.org/x/oauth2/github"
 )
 
 var conf *oauth2.Config

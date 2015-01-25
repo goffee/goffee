@@ -4,12 +4,11 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web" // ResultsIndex renders results JSON
 	"github.com/gophergala/goffee/web/helpers"
 	"github.com/gophergala/goffee/web/render"
-	"github.com/zenazn/goji/web"
 )
 
-// ResultsIndex renders results JSON
 func ResultsIndex(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, err := helpers.CurrentUser(c)
 

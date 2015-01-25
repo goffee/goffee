@@ -16,9 +16,11 @@ import (
 const ipReflector = "http://stephensykes.com/ip_reflection.html"
 const ipRefreshInterval = 5 * time.Minute
 
-var exit = make(chan bool)
-var currentIP string
-var lastIPChange time.Time
+var (
+	exit         = make(chan bool)
+	lastIPChange time.Time
+	currentIP    string
+)
 
 func Run() {
 	go run()
@@ -42,7 +44,6 @@ func run() {
 		if time.Since(lastIPChange) > ipRefreshInterval {
 			newip()
 		}
-
 	}
 }
 

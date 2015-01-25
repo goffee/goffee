@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/hailiang/gosocks"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/hailiang/gosocks"
 	"time"
 )
 
@@ -22,7 +22,7 @@ const httpTimeout = 15
 func prepareProxyClient() *http.Client {
 	dialSocksProxy := socks.DialSocksProxy(socks.SOCKS5, "127.0.0.1:9050")
 	transport := &http.Transport{Dial: dialSocksProxy}
-	
+
 	return &http.Client{Transport: transport, Timeout: httpTimeout * time.Second}
 }
 

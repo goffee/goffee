@@ -6,14 +6,13 @@ import (
 	"net/url"
 	"strconv"
 
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/justinas/nosurf"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web" // ChecksIndex render the checks index for the current user
 	"github.com/gophergala/goffee/data"
 	"github.com/gophergala/goffee/web/helpers"
 	"github.com/gophergala/goffee/web/render"
-	"github.com/justinas/nosurf"
-	"github.com/zenazn/goji/web"
 )
 
-// ChecksIndex render the checks index for the current user
 func ChecksIndex(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, err := helpers.CurrentUser(c)
 

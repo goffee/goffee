@@ -3,15 +3,15 @@ package web
 import (
 	"net/http"
 
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/gorilla/sessions"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/hypebeast/gojistatic"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/justinas/nosurf"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/unrolled/secure"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/graceful"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web/middleware"
 	"github.com/gophergala/goffee/data"
 	"github.com/gophergala/goffee/web/controllers"
-	"github.com/gorilla/sessions"
-	"github.com/hypebeast/gojistatic"
-	"github.com/justinas/nosurf"
-	"github.com/unrolled/secure"
-	"github.com/zenazn/goji/graceful"
-	"github.com/zenazn/goji/web"
-	"github.com/zenazn/goji/web/middleware"
 )
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))

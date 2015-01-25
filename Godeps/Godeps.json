@@ -1,0 +1,95 @@
+{
+	"ImportPath": "github.com/gophergala/goffee",
+	"GoVersion": "go1.4",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/garyburd/redigo/internal",
+			"Rev": "61e2910408efd40dafb3c7d856a4cf8aeb5fb1c6"
+		},
+		{
+			"ImportPath": "github.com/garyburd/redigo/redis",
+			"Rev": "61e2910408efd40dafb3c7d856a4cf8aeb5fb1c6"
+		},
+		{
+			"ImportPath": "github.com/google/go-github/github",
+			"Rev": "1e55bf6be814270d7cc31a60868c4bd89e4e68c0"
+		},
+		{
+			"ImportPath": "github.com/google/go-querystring/query",
+			"Rev": "d8840cbb2baa915f4836edda4750050a2c0b7aea"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "215affda49addc4c8ef7e2534915df2c8c35c6cd"
+		},
+		{
+			"ImportPath": "github.com/gorilla/securecookie",
+			"Rev": "f0559d009e6943011cd1ba6eb16195cf5e0ed326"
+		},
+		{
+			"ImportPath": "github.com/gorilla/sessions",
+			"Rev": "aa5e036e6c44aec69a32eb41097001978b29ad31"
+		},
+		{
+			"ImportPath": "github.com/hailiang/gosocks",
+			"Rev": "b913be938dea98d094c3942c23e85f8dd42021ff"
+		},
+		{
+			"ImportPath": "github.com/hypebeast/gojistatic",
+			"Rev": "99b778e145961024738f4cd7c67e9d8766afc7f1"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/gorm",
+			"Rev": "e2c989be175910f994e4dc260608a2bf884b60fc"
+		},
+		{
+			"ImportPath": "github.com/justinas/nosurf",
+			"Comment": "0.1-45-g233ade3",
+			"Rev": "233ade3890238ecca6efa41d94a70d89df132ed6"
+		},
+		{
+			"ImportPath": "github.com/lib/pq",
+			"Comment": "go1.0-cutoff-20-g308412e",
+			"Rev": "308412e3e54d78c6411b1d5ef52c0660b921c81b"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-sqlite3",
+			"Rev": "d8029554b4cbb9a1c12311d307f4154b515566b4"
+		},
+		{
+			"ImportPath": "github.com/oschwald/geoip2-golang",
+			"Comment": "v0.1.0-7-g6953b50",
+			"Rev": "6953b50ff592a0c45f76062e90d824113c1451d2"
+		},
+		{
+			"ImportPath": "github.com/oschwald/maxminddb-golang",
+			"Comment": "v0.2.0-9-g81c4e04",
+			"Rev": "81c4e045a5fb2dd66cde4a995a5591d79315efa3"
+		},
+		{
+			"ImportPath": "github.com/unrolled/secure",
+			"Rev": "7c5d20f5d23b4825dfe542a006b37d6bdb5950f6"
+		},
+		{
+			"ImportPath": "github.com/zenazn/goji/graceful",
+			"Comment": "v0.8.3",
+			"Rev": "dcb9598cbbcfcc10d2c1ee1e66958e54a2c84b52"
+		},
+		{
+			"ImportPath": "github.com/zenazn/goji/web",
+			"Comment": "v0.8.3",
+			"Rev": "dcb9598cbbcfcc10d2c1ee1e66958e54a2c84b52"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "5058c78c3627b31e484a81463acd51c7cecc06f3"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2",
+			"Rev": "d8ba9d6c175596d5517faeeb51246a6e5f925e31"
+		}
+	]
+}

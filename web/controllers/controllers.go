@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
 	"github.com/gophergala/goffee/web/render"
-	"github.com/zenazn/goji/web"
 )
 
 func renderError(c web.C, w http.ResponseWriter, req *http.Request, message string, status int) {

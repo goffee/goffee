@@ -5,11 +5,10 @@ import (
 	"net"
 	"net/http"
 
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/oschwald/geoip2-golang" // IP returnss the remote IP address and other info
 	"github.com/gophergala/goffee/web/render"
-	"github.com/oschwald/geoip2-golang"
 )
 
-// IP returnss the remote IP address and other info
 func IP(w http.ResponseWriter, req *http.Request) {
 	db, err := geoip2.Open("geoip/GeoLite2-Country.mmdb")
 	if err != nil {

@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
 	"github.com/gophergala/goffee/web/helpers"
-	"github.com/zenazn/goji/web"
 )
 
 func formatTime(t time.Time) string {
