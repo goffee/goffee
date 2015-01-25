@@ -8,11 +8,11 @@ import (
 
 	_ "github.com/denisenkom/go-mssqldb"
 	testdb "github.com/erikstmartin/go-testdb"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/gophergala/goffee/Godeps/_workspace/src/github.com/go-sql-driver/mysql"
 	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/jinzhu/gorm"
-	_ "github.com/gophergala/goffee/Godeps/_workspace/src/github.com/lib/pq"
 	_ "github.com/gophergala/goffee/Godeps/_workspace/src/github.com/mattn/go-sqlite3"
 	"github.com/jinzhu/now"
+	_ "github.com/lib/pq"
 	"os"
 	"testing"
 	"time"
