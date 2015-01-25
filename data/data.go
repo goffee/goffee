@@ -59,7 +59,7 @@ func InitDatabase(dialect string, args ...interface{}) (err error) {
 }
 
 func Checks() (checks []Check, err error) {
-	res := db.Find(&checks)
+	res := db.Select("distinct(url)").Find(&checks)
 	return checks, res.Error
 }
 
