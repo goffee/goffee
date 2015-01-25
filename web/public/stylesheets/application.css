@@ -16,14 +16,14 @@ body {
   width: 24px;
 }
 
-.home-header h1 {
-  font-size: 64px;
-}
-
 #homepic {
-  margin-top: 40px;
+  margin-top: 32px;
   max-width: 100%;
   max-height: 305px;
+}
+
+.home-header h1 {
+  font-size: 64px;
 }
 
 .info {
@@ -31,8 +31,29 @@ body {
   margin-top: 50px;
 }
 
+@media (max-width: 600px) {
+  .home-header h1 {
+    margin-top: 0px;
+    font-size: 40px;
+  }
+
+  .info {
+    font-size: 16px;
+    margin-top: 50px;
+  }
+
+  #homepic {
+    margin-top: 20px;
+    max-height: 252px;
+  }
+}
+
 .modal-body img {
   display: block;
   margin: 0 auto;
   max-width: 100%;
+}
+
+#home-thumbnails .caption {
+  min-height: 152px;
 }

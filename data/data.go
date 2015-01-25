@@ -6,6 +6,7 @@ import (
 	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/jinzhu/gorm"
 	_ "github.com/gophergala/goffee/Godeps/_workspace/src/github.com/lib/pq"
 	_ "github.com/gophergala/goffee/Godeps/_workspace/src/github.com/mattn/go-sqlite3" // DB adapters
+	"github.com/vincent-petithory/countries"
 )
 
 var db gorm.DB
@@ -29,7 +30,8 @@ type Result struct {
 	Country   string
 	CheckId   int64
 
-	URL string `sql:"-"`
+	URL         string `sql:"-"`
+	CountryName string `sql:"-"`
 }
 
 type User struct {
@@ -156,4 +158,13 @@ func FindCheck(id int64) (check Check, err error) {
 		return check, res.Error
 	}
 	return check, nil
+}
+
+func (r *Result) AfterFind() {
+	country := countries.Countries[r.Country]
+	if country.ISO3166OneEnglishShortNameReadingOrder != "" {
+		r.CountryName = country.ISO3166OneEnglishShortNameReadingOrder
+	} else {
+		r.CountryName = "Unknown"
+	}
 }

@@ -16,7 +16,7 @@ func Run() {
 func run() {
 	scheduleChecks()
 
-	for range time.Tick(5 * time.Second) {
+	for range time.Tick(15 * time.Second) {
 		scheduleChecks()
 	}
 }
