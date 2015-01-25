@@ -71,7 +71,7 @@ func init() {
 		controllers.OAuthConf = &oauth2.Config{
 			ClientID:     gitHubClientID,
 			ClientSecret: gitHubClientSecret,
-			Scopes:       []string{},
+			Scopes:       []string{"user:email"},
 			Endpoint:     github.Endpoint,
 		}
 
