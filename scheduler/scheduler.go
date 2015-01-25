@@ -31,7 +31,6 @@ func scheduleChecks(checks []data.Check) {
 	for _, check := range checks {
 		queue.AddJob(check.URL)
 	}
-	queue.AddJob("newip")
 }
 
 func Wait() {
