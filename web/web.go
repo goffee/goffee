@@ -47,6 +47,7 @@ func StartServer(bind string) {
 
 	m := web.New()
 
+	m.Use(middleware.RealIP)
 	m.Use(gojistatic.Static("web/public", gojistatic.StaticOptions{SkipLogging: true}))
 	m.Use(middleware.EnvInit)
 	m.Use(secureMiddleware.Handler)
