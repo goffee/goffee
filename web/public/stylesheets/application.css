@@ -11,3 +11,16 @@ body {
 .checks-header {
   padding: 40px 0px;
 }
+
+h1 {
+  font-size: 64px;
+}
+
+#homepic {
+  margin-top: 40px;
+}
+
+.info {
+  font-size: 34px;
+  margin-top: 50px;
+}
