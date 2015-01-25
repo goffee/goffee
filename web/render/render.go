@@ -17,7 +17,7 @@ func formatTime(t time.Time) string {
 }
 
 // Template renders HTML templates
-func Template(c web.C, w http.ResponseWriter, templates []string, name string, data map[string]interface{}) error {
+func Template(c web.C, w http.ResponseWriter, r *http.Request, templates []string, name string, data map[string]interface{}) error {
 	funcMap := template.FuncMap{
 		"formatTime": formatTime,
 	}
@@ -38,6 +38,10 @@ func Template(c web.C, w http.ResponseWriter, templates []string, name string, d
 
 	data["CurrentUser"] = user
 	data["UserSignedIn"] = loggedIn
+
+	session := helpers.CurrentSession(c)
+	data["Flashes"] = session.Flashes()
+	session.Save(r, w)
 
 	err = t.ExecuteTemplate(w, name, data)
 	if err != nil {

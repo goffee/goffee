@@ -7,10 +7,10 @@ import (
 	"github.com/zenazn/goji/web"
 )
 
-func renderError(c web.C, w http.ResponseWriter, message string, status int) {
+func renderError(c web.C, w http.ResponseWriter, req *http.Request, message string, status int) {
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/error.html")
-	err := render.Template(c, w, templates, "layout", map[string]interface{}{"Status": status, "Message": message})
+	err := render.Template(c, w, req, templates, "layout", map[string]interface{}{"Status": status, "Message": message})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -20,7 +20,7 @@ func renderError(c web.C, w http.ResponseWriter, message string, status int) {
 func Home(c web.C, w http.ResponseWriter, req *http.Request) {
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/home.html")
-	err := render.Template(c, w, templates, "layout", map[string]interface{}{})
+	err := render.Template(c, w, req, templates, "layout", map[string]interface{}{})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -30,7 +30,7 @@ func Home(c web.C, w http.ResponseWriter, req *http.Request) {
 func NotFound(c web.C, w http.ResponseWriter, req *http.Request) {
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/404.html")
-	err := render.Template(c, w, templates, "layout", map[string]interface{}{})
+	err := render.Template(c, w, req, templates, "layout", map[string]interface{}{})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

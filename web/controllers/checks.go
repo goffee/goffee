@@ -18,19 +18,19 @@ func ChecksIndex(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, err := helpers.CurrentUser(c)
 
 	if err != nil {
-		renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
+		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
 	checks, err := user.Checks()
 	if err != nil {
-		renderError(c, w, "Something went wrong", http.StatusInternalServerError)
+		renderError(c, w, req, "Something went wrong", http.StatusInternalServerError)
 		return
 	}
 
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/checks.html")
-	err = render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "Checks", "Checks": checks})
+	err = render.Template(c, w, req, templates, "layout", map[string]interface{}{"Title": "Checks", "Checks": checks})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -39,14 +39,14 @@ func ChecksIndex(c web.C, w http.ResponseWriter, req *http.Request) {
 // NewCheck renders the new check form
 func NewCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 	if !helpers.UserSignedIn(c) {
-		renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
+		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/new_check.html")
 	csrf := nosurf.Token(req)
-	err := render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "New Check", "CSRFToken": csrf})
+	err := render.Template(c, w, req, templates, "layout", map[string]interface{}{"Title": "New Check", "CSRFToken": csrf})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -57,7 +57,7 @@ func CreateCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, err := helpers.CurrentUser(c)
 
 	if err != nil {
-		renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
+		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
@@ -81,20 +81,20 @@ func ShowCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, err := helpers.CurrentUser(c)
 
 	if err != nil {
-		renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
+		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
 	checkId, err := strconv.ParseInt(c.URLParams["id"], 10, 64)
 	if err != nil {
-		renderError(c, w, "Check not found", http.StatusNotFound)
+		renderError(c, w, req, "Check not found", http.StatusNotFound)
 		return
 	}
 
 	check, err := user.Check(checkId)
 
 	if err != nil {
-		renderError(c, w, "Check not found", http.StatusNotFound)
+		renderError(c, w, req, "Check not found", http.StatusNotFound)
 		return
 	}
 
@@ -102,7 +102,7 @@ func ShowCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 
 	templates := render.GetBaseTemplates()
 	templates = append(templates, "web/views/check.html")
-	err = render.Template(c, w, templates, "layout", map[string]interface{}{"Title": "Check: " + check.URL, "Check": check, "CSRFToken": csrf})
+	err = render.Template(c, w, req, templates, "layout", map[string]interface{}{"Title": "Check: " + check.URL, "Check": check, "CSRFToken": csrf})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -113,24 +113,27 @@ func DeleteCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, err := helpers.CurrentUser(c)
 
 	if err != nil {
-		renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
+		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
 	checkId, err := strconv.ParseInt(c.URLParams["id"], 10, 64)
 	if err != nil {
-		renderError(c, w, "Check not found", http.StatusNotFound)
+		renderError(c, w, req, "Check not found", http.StatusNotFound)
 		return
 	}
 
 	check, err := user.Check(checkId)
 
 	if err != nil {
-		renderError(c, w, "Check not found", http.StatusNotFound)
+		renderError(c, w, req, "Check not found", http.StatusNotFound)
 		return
 	}
 
 	check.Delete()
+	session := helpers.CurrentSession(c)
+	session.AddFlash("Check deleted")
+	session.Save(req, w)
 
 	http.Redirect(w, req, "/checks", http.StatusSeeOther)
 }

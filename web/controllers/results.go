@@ -14,27 +14,27 @@ func ResultsIndex(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, err := helpers.CurrentUser(c)
 
 	if err != nil {
-		renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
+		renderError(c, w, req,"You need to re-authenticate", http.StatusUnauthorized)
 		return
 	}
 
 	checkId, err := strconv.ParseInt(c.URLParams["check_id"], 10, 64)
 	if err != nil {
-		renderError(c, w, "Check not found", http.StatusNotFound)
+		renderError(c, w, req,"Check not found", http.StatusNotFound)
 		return
 	}
 
 	check, err := user.Check(checkId)
 
 	if err != nil {
-		renderError(c, w, "Check not found", http.StatusNotFound)
+		renderError(c, w, req,"Check not found", http.StatusNotFound)
 		return
 	}
 
 	results, err := check.Results()
 
 	if err != nil {
-		renderError(c, w, "No results found", http.StatusNotFound)
+		renderError(c, w, req,"No results found", http.StatusNotFound)
 		return
 	}
 

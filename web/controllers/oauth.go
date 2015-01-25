@@ -41,7 +41,7 @@ func OAuthCallback(c web.C, w http.ResponseWriter, req *http.Request) {
 	// Exchange the received code for a token
 	token, err := conf.Exchange(oauth2.NoContext, code)
 	if err != nil {
-		renderError(c, w, "Authentication failed", http.StatusUnauthorized)
+		renderError(c, w, req,"Authentication failed", http.StatusUnauthorized)
 		return
 	}
 
@@ -52,7 +52,7 @@ func OAuthCallback(c web.C, w http.ResponseWriter, req *http.Request) {
 	user, _, err := githubClient.Users.Get("")
 
 	if err != nil {
-		renderError(c, w, "Authentication failed", http.StatusUnauthorized)
+		renderError(c, w, req,"Authentication failed", http.StatusUnauthorized)
 		return
 	}
 
