@@ -26,8 +26,6 @@ func run() {
 	for {
 		notifications := queue.FetchNotifications()
 		for _, n := range notifications {
-			fmt.Printf("Read notification: %s\n", n)
-
 			checkId, err := strconv.ParseInt(n, 10, 64)
 
 			check, err := data.FindCheck(checkId)

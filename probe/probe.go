@@ -2,7 +2,6 @@ package probe
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"strings"
 	"sync"
@@ -37,9 +36,7 @@ func run() {
 	newip()
 
 	for { // ever
-		fmt.Println("Redis fetch")
 		batch := queue.FetchBatch()
-		fmt.Println(batch)
 		for _, item := range batch {
 			wg.Add(1)
 			go check(item, &wg)

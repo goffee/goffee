@@ -62,7 +62,6 @@ func CreateCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 
 	u, err := url.Parse(req.FormValue("url"))
 	if err != nil || u.Host == "" || (u.Scheme != "http" && u.Scheme != "https") {
-		fmt.Println(err)
 		http.Redirect(w, req, "/checks/new", http.StatusSeeOther)
 		return
 	}

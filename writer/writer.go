@@ -2,7 +2,6 @@ package writer
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 
 	"github.com/gophergala/goffee/data"
@@ -31,7 +30,6 @@ func run() {
 				previousSuccess := check.Success
 
 				check.AddResult(&result)
-				fmt.Printf("Added result: %v\n", result)
 
 				if previousSuccess && !result.Success {
 					queue.AddNotification(strconv.FormatInt(check.Id, 10))
