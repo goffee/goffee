@@ -8,6 +8,17 @@
       <p class="info">Written in Go, Goffee is a fast, concurrent way to monitor your sites from all over the World.</p>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      {{{if not .UserSignedIn }}}
+        <a class="btn btn-default btn-lg" href="/oauth/authorize">
+          <img src="/images/github.png" aria-hidden="true">&nbsp;
+          Sign in with Github
+        </a>
+      {{{end}}}
+    </div>
+  </div>
 </div>
 
 <div class="row" id="home-thumbnails">
