@@ -11,6 +11,7 @@ import (
 	"github.com/unrolled/secure"
 	"github.com/zenazn/goji/graceful"
 	"github.com/zenazn/goji/web"
+	"github.com/zenazn/goji/web/middleware"
 )
 
 var store = sessions.NewCookieStore([]byte("something-very-secret"))
@@ -25,7 +26,6 @@ func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
 		// Save it.
 		session.Save(r, w)
 
-		c.Env = make(map[string]interface{})
 		c.Env["Session"] = session
 
 		h.ServeHTTP(w, r)
@@ -48,6 +48,7 @@ func StartServer(bind string) {
 	m := web.New()
 
 	m.Use(gojistatic.Static("web/public", gojistatic.StaticOptions{SkipLogging: true}))
+	m.Use(middleware.EnvInit)
 	m.Use(secureMiddleware.Handler)
 	m.Use(SessionMiddleware)
 	m.Use(nosurf.NewPure)
