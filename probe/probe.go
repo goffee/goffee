@@ -14,6 +14,7 @@ import (
 )
 
 const ipReflector = "http://stephensykes.com/ip_reflection.html"
+const ipRefreshInterval = 5 * time.Minute
 
 var exit = make(chan bool)
 var currentIP string
@@ -37,11 +38,11 @@ func run() {
 		}
 
 		wg.Wait()
-		
-		if time.Since(lastIPChange) > time.Minute {
+
+		if time.Since(lastIPChange) > ipRefreshInterval {
 			newip()
 		}
-		
+
 	}
 }
 
