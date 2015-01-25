@@ -100,3 +100,14 @@ body {
 #github-button .text {
   vertical-align: middle;
 }
+
+#diagram img {
+  margin: 0 auto;
+  display: block;
+  width: 800px;
+  max-width: 100%;
+}
+
+#diagram dd {
+  margin-bottom: 1em;
+}

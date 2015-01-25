@@ -1,0 +1,121 @@
+{{{define "body"}}}
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li class="active">About</li>
+</ol>
+
+<div class="about-header">
+  <h1>
+    How is Goffee Made?
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-md-10">
+    <h3>Libraries, Frameworks, and other third-party components</h3>
+    <p>
+      The web UI is built on top of Goji and go templates. For templating we
+      elected to use Go HTML templates. The site styles are based on Bootstrap 3
+      and the Superhero theme from Bootswatch. Client-side templates are rendered
+      with Handlebars.js.
+    </p>
+    <ul>
+      <li>Go 1.4</li>
+      <li>Tor 0.2.5</li>
+      <li>Web Framework: Goji</li>
+      <li>ORM: GORM</li>
+      <li>HTML templates: Go templates</li>
+      <li>Web UI styles: Bootstrap 3 &amp; the Superhero theme from Bootswatch</li>
+      <li>Client side JS: jQuery, Moment.js, Happy.js, Handlebars.js</li>
+      <li>KV-Store: Redis</li>
+      <li>Database: MySQL</li>
+      <li>Signins: OAuth 2 &amp; GitHub</li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-10">
+    <h3>Hosting</h3>
+    <p>
+      Goffee is gosted on the Google Cloud Platform, using the Google Container
+      Engine service. The web UI is fronted by Cloudflare. In addition to this we
+      also have an IP reflector service hosted on Heroku.
+    </p>
+    <p>
+      While Goffee has many components (as you can see in the diagram/description
+      below), it is possible to host these on a single server. Aside from MySQL,
+      Redis, and the Tor daemon, all the components ship as a single package.
+    </p>
+  </div>
+</div>
+
+<div class="row" id="diagram">
+  <div class="col-md-10">
+    <h3>Diagram of the components</h3>
+    <p>
+      Goffee is gosted on the Google Cloud Platform, using the Google Container
+      Engine service. The web UI is fronted by Cloudflare. In addition to this we
+      also have an IP reflector service hosted on Heroku.
+    </p>
+    <dl>
+      <dt>Tor</dt>
+      <dd>
+        The Probes all run their requests through the Tor network, periodically
+        switching exit nodes. This allows Goffee to check the availability of
+        the checked sites from multiple geographical locations.
+      </dd>
+
+      <dt>The Queue</dt>
+      <dd>
+        The Queue is used for coordination betweent the different end points. The
+        actual data for the queue is stored in a Redis key-value store.
+      </dd>
+
+      <dt>The Probes</dt>
+      <dd>
+        The Probes take jobs off the queue which tell them what URl needs to be
+        checked via Tor. The results from these checks are placed back on the
+        queue for the Writer.
+      </dd>
+
+      <dt>The Scheduler</dt>
+      <dd>
+        The Scheduler places jobs on to the queue on a fixed schedule (about
+        once per minute per check). Using the scheduler and Queue we can ensure
+        that multiple probes don't end up simultaneously checking the health of
+        the same URL.
+      </dd>
+
+      <dt>The Writer</dt>
+      <dd>
+        The Writer pops results off the queue and writes them to the Database.
+        If there has been a change of state (success to failure, or failure to
+        success) a job is added on the Queue for the Notifier.
+      </dd>
+
+      <dt>The Notifier</dt>
+      <dd>
+        The Notifier pops botifications off the Queue and send the notifications
+        to the owners of the checks. Currently only email notifications are
+        supported, but in the future it would be possible to add, for example,
+        SMS notifications.
+      </dd>
+
+      <dt>The Database</dt>
+      <dd>The checks and their results are store in a MySQL database.</dd>
+
+      <dt>Web UI</dt>
+      <dd>
+        The Web UI displays checks and results from the MySQL database and
+        presents it to the users. Users can add new checks to the database via
+        the Web UI.
+      </dd>
+    </dl>
+  </div>
+  <div class="col-md-12">
+    <img src="/images/goffee-diagram.svg" onerror="this.onerror=null;this.src='/images/goffee-diagram.png'">
+  </div>
+</div>
+
+{{{end}}}

@@ -52,6 +52,7 @@ func StartServer(bind string) {
 	m.Use(nosurf.NewPure)
 
 	m.Get("/", controllers.Home)
+	m.Get("/about", controllers.About)
 
 	m.Get("/ip", controllers.IP)
 
