@@ -38,7 +38,7 @@
       {{{end}}}
     </div>
     <div class="col-md-2">
-      <form action="/checks/{{{.Check.Id}}}" method="POST" id="delete-check-form">
+      <form action="/checks/{{{.Check.Id}}}/delete" method="POST" id="delete-check-form">
         <input type="hidden" name="csrf_token" value="{{{ .CSRFToken }}}">
         <button data-state="unarmed" type="submit" class="btn btn-danger">
           <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>

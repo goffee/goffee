@@ -110,27 +110,27 @@ func ShowCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 
 // DeleteCheck deletes a single check
 func DeleteCheck(c web.C, w http.ResponseWriter, req *http.Request) {
-	// user, err := helpers.CurrentUser(c)
-	//
-	// if err != nil {
-	// 	renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
-	// 	return
-	// }
+	user, err := helpers.CurrentUser(c)
 
-	// checkId, err := strconv.ParseInt(c.URLParams["id"], 10, 64)
-	// if err != nil {
-	// 	renderError(c, w, "Check not found", http.StatusNotFound)
-	// 	return
-	// }
-	//
-	// check, err := user.Check(checkId)
-	//
-	// if err != nil {
-	// 	renderError(c, w, "Check not found", http.StatusNotFound)
-	// 	return
-	// }
+	if err != nil {
+		renderError(c, w, "You need to re-authenticate", http.StatusUnauthorized)
+		return
+	}
 
-	// check.Delete()
+	checkId, err := strconv.ParseInt(c.URLParams["id"], 10, 64)
+	if err != nil {
+		renderError(c, w, "Check not found", http.StatusNotFound)
+		return
+	}
+
+	check, err := user.Check(checkId)
+
+	if err != nil {
+		renderError(c, w, "Check not found", http.StatusNotFound)
+		return
+	}
+
+	check.Delete()
 
 	http.Redirect(w, req, "/checks", http.StatusSeeOther)
 }
