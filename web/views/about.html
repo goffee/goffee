@@ -46,72 +46,127 @@
     <p>
       While Goffee has many components (as you can see in the diagram/description
       below), it is possible to host these on a single server. Aside from MySQL,
-      Redis, and the Tor daemon, all the components ship as a single package.
+      Redis, and the Tor daemon, all the components ship as a single package
+      (which can be run in different modes).
     </p>
   </div>
 </div>
 
 <div class="row" id="diagram">
-  <div class="col-md-10">
+  <div class="col-md-12">
     <h3>Diagram of the components</h3>
-    <div class="col-md-12">
-      <img src="/images/goffee-diagram.svg" onerror="this.onerror=null;this.src='/images/goffee-diagram.png'">
-    </div>
-    <dl>
-      <dt>Tor</dt>
-      <dd>
+    <img src="/images/goffee-diagram.svg" onerror="this.onerror=null;this.src='/images/goffee-diagram.png'">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-6 col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Tor <span class="gosticker gocolor">GO</span></h3>
+      </div>
+      <div class="panel-body">
         The Probes all run their requests through the Tor network, periodically
         switching exit nodes. This allows Goffee to check the availability of
         the checked sites from multiple geographical locations.
-      </dd>
-
-      <dt>The Queue <span class="gosticker gocolor">GO</span></dt>
-      <dd>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">The Queue <span class="gosticker gocolor">GO</span></h3>
+      </div>
+      <div class="panel-body">
         The Queue is used for coordination betweent the different end points. The
         actual data for the queue is stored in a Redis key-value store.
-      </dd>
+      </div>
+    </div>
+  </div>
 
-      <dt>The Probes <span class="gosticker gocolor">GO</span></dt>
-      <dd>
+  <div class="clearfix visible-sm-block"></div>
+
+  <div class="col-sm-6 col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">The Probes <span class="gosticker gocolor">GO</span></h3>
+      </div>
+      <div class="panel-body">
         The Probes take jobs off the queue which tell them what URL needs to be
         checked via Tor. The results from these checks are placed back on a
         queue for the Writer.
-      </dd>
-
-      <dt>The Scheduler <span class="gosticker gocolor">GO</span></dt>
-      <dd>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">The Scheduler <span class="gosticker gocolor">GO</span></h3>
+      </div>
+      <div class="panel-body">
         The Scheduler places jobs on to the queue on a fixed schedule (about
         once per minute per check). Using the scheduler and Queue we can ensure
         that multiple probes don't end up simultaneously checking the health of
         the same URL.
-      </dd>
+      </div>
+    </div>
+  </div>
+</div>
 
-      <dt>The Writer <span class="gosticker gocolor">GO</span></dt>
-      <dd>
+<div class="row">
+  <div class="col-sm-6 col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">The Writer <span class="gosticker gocolor">GO</span></h3>
+      </div>
+      <div class="panel-body">
         The Writer pops results off a queue and writes them to the Database.
         If there has been a change of state (success to failure, or failure to
         success) a job is added on the Queue for the Notifier.
-      </dd>
+      </div>
+    </div>
+  </div>
 
-      <dt>The Notifier <span class="gosticker gocolor">GO</span></dt>
-      <dd>
+  <div class="col-sm-6 col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">The Notifier <span class="gosticker gocolor">GO</span></h3>
+      </div>
+      <div class="panel-body">
         The Notifier pops botifications off the Queue and sends the notifications
         to the owners of the checks. Currently only email notifications are
         supported, but in the future it would be possible to add, for example,
         SMS notifications.
-      </dd>
+      </div>
+    </div>
+  </div>
 
-      <dt>The Database</dt>
-      <dd>The checks and their results are stored in a MySQL database.</dd>
+  <div class="clearfix visible-sm-block"></div>
 
-      <dt>Web UI <span class="gosticker gocolor">GO</span> <span class="gosticker htmlcolor">HTML</span> <span class="gosticker jscolor">Javascript</span></dt>
-      <dd>
+  <div class="col-sm-6 col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">The Database <span class="gosticker sqlcolor">SQL</span></h3>
+      </div>
+      <div class="panel-body">
+        The checks and their results are stored in a MySQL database.
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-md-3">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Web UI <span class="gosticker gocolor">GO</span> <span class="gosticker htmlcolor">HTML</span> <span class="gosticker jscolor">Javascript</span></h3>
+      </div>
+      <div class="panel-body">
         The Web UI displays checks and results from the MySQL database and
         presents it to the users. Users can add new checks to the database via
         the Web UI.
-      </dd>
-    </dl>
+      </div>
+    </div>
   </div>
 </div>
+
 
 {{{end}}}
