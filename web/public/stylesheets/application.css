@@ -16,20 +16,34 @@ body {
   width: 24px;
 }
 
-.home-header h1 {
-  font-size: 64px;
-}
-
 #homepic {
   margin-top: 40px;
   max-width: 100%;
   max-height: 305px;
 }
 
+.home-header h1 {
+  font-size: 64px;
+}
+
 .info {
   font-size: 34px;
   margin-top: 50px;
 }
+
+@media (max-width: 600px) {
+  .home-header h1 {
+    font-size: 40px;
+  }
+
+  .info {
+    font-size: 16px;
+    margin-top: 50px;
+  }
+}
+
+
+
 
 .modal-body img {
   display: block;
