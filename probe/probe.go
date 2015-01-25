@@ -13,7 +13,7 @@ import (
 	"github.com/gophergala/goffee/tor"
 )
 
-const ipReflector = "http://goffee.io/ip"
+const ipReflector = "https://goffee.herokuapp.com/ip"
 const ipRefreshInterval = 5 * time.Minute
 
 type IPResponse struct {
