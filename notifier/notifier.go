@@ -52,9 +52,9 @@ func sendMessage(c data.Check, u data.User) {
 	var subject string
 
 	if c.Success {
-		subject = fmt.Sprintf("Down: %s (%d)", c.URL, c.Status)
-	} else {
 		subject = fmt.Sprintf("Up: %s (%d)", c.URL, c.Status)
+	} else {
+		subject = fmt.Sprintf("Down: %s (%d)", c.URL, c.Status)
 	}
 
 	html := `<strong>%s</strong>
