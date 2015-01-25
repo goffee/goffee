@@ -59,6 +59,15 @@ func OAuthCallback(c web.C, w http.ResponseWriter, req *http.Request) {
 	}
 	u.UpdateOrCreate()
 
+	if u.Email == "" {
+		emails, _, err := githubClient.Users.ListEmails(nil)
+		if err == nil && len(emails) > 0 {
+			email := emails[0]
+			u.Email = *email.Email
+			u.UpdateOrCreate()
+		}
+	}
+
 	session.Values["UserId"] = u.Id
 	session.Save(req, w)
 
