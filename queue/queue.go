@@ -19,6 +19,10 @@ func FetchResults() (results []string) {
 	return listFetch("results")
 }
 
+func FetchNotifications() (results []string) {
+	return listFetch("notifications")
+}
+
 func WriteResult(result string) {
 	fmt.Println("Writing result " + result)
 	c, err := redis.Dial("tcp", RedisAddressWithPort)
@@ -35,15 +39,22 @@ func WriteResult(result string) {
 	return
 }
 
-func AddJob(job string) {
+func listWrite(list, content string) {
 	c, err := redis.Dial("tcp", RedisAddressWithPort)
 	if err != nil {
 		panic(err)
 	}
 	defer c.Close()
 
-	c.Do("LPUSH", "jobs", job)
-	fmt.Println("Job added:", job)
+	c.Do("LPUSH", list, content)
+}
+
+func AddJob(job string) {
+	listWrite("jobs", job)
+}
+
+func AddNotification(notification string) {
+	listWrite("notifications", notification)
 }
 
 func listFetch(listName string) (results []string) {

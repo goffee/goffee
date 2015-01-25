@@ -104,6 +104,11 @@ func (c *Check) Results() (results []Result, err error) {
 	return results, res.Error
 }
 
+func (c *Check) User() (user User, err error) {
+	res := db.Model(c).Related(&user)
+	return user, res.Error
+}
+
 func (c *Check) Delete() (err error) {
 	res := db.Delete(c)
 	return res.Error
@@ -125,4 +130,12 @@ func FindUser(id int64) (user User, err error) {
 		return user, res.Error
 	}
 	return user, nil
+}
+
+func FindCheck(id int64) (check Check, err error) {
+	res := db.First(&check, id)
+	if res.Error != nil {
+		return check, res.Error
+	}
+	return check, nil
 }

@@ -3,6 +3,7 @@ package writer
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	"github.com/gophergala/goffee/data"
 	"github.com/gophergala/goffee/queue"
@@ -29,8 +30,16 @@ func run() {
 			}
 
 			for _, check := range checks {
+				previousSuccess := check.Success
+
 				check.AddResult(&result)
 				fmt.Printf("Added result: %v\n", result)
+
+				if previousSuccess && !result.Success {
+					queue.AddNotification(strconv.FormatInt(check.Id, 10))
+				} else if !previousSuccess && result.Success {
+					queue.AddNotification(strconv.FormatInt(check.Id, 10))
+				}
 			}
 		}
 	}
