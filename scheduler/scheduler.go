@@ -18,7 +18,7 @@ func run() {
 		scheduleChecks(checks)
 	}
 
-	for range time.Tick(10 * time.Second) {
+	for range time.Tick(60 * time.Second) {
 		if checks, err := data.Checks(); err == nil {
 			scheduleChecks(checks)
 		}
