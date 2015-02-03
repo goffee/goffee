@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
 )
 
 func testOptions(r *http.Request, f func(*web.C, http.ResponseWriter, *http.Request)) *httptest.ResponseRecorder {

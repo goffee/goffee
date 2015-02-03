@@ -6,7 +6,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/justinas/nosurf"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/justinas/nosurf"
 )
 
 var templateString = `

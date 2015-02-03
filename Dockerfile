@@ -9,8 +9,8 @@ ADD deployment/run.sh /run.sh
 RUN chmod 755 /*.sh
 ADD deployment/supervisord-tor.conf /etc/supervisor/conf.d/supervisord-tor.conf
 ADD deployment/supervisord-goffee.conf /etc/supervisor/conf.d/supervisord-goffee.conf
-ADD . /go/src/github.com/gophergala/goffee
-WORKDIR /go/src/github.com/gophergala/goffee
-RUN go install github.com/gophergala/goffee
+ADD . /go/src/github.com/goffee/goffee
+WORKDIR /go/src/github.com/goffee/goffee
+RUN go install github.com/goffee/goffee
 CMD ["/run.sh"]
 EXPOSE 80

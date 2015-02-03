@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web/mutil"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web/mutil"
 )
 
 // Logger is a middleware that logs the start and end of each request, along

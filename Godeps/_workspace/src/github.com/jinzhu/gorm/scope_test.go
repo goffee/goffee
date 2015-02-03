@@ -1,7 +1,7 @@
 package gorm_test
 
 import (
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/jinzhu/gorm"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/jinzhu/gorm"
 	"testing"
 )
 

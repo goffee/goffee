@@ -4,17 +4,17 @@ import (
 	"flag"
 	"log"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/gorilla/sessions"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2/github"
-	"github.com/gophergala/goffee/data"
-	"github.com/gophergala/goffee/notifier"
-	"github.com/gophergala/goffee/probe"
-	"github.com/gophergala/goffee/queue"
-	"github.com/gophergala/goffee/scheduler"
-	"github.com/gophergala/goffee/web"
-	"github.com/gophergala/goffee/web/controllers"
-	"github.com/gophergala/goffee/writer"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/gorilla/sessions"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2/github"
+	"github.com/goffee/goffee/data"
+	"github.com/goffee/goffee/notifier"
+	"github.com/goffee/goffee/probe"
+	"github.com/goffee/goffee/queue"
+	"github.com/goffee/goffee/scheduler"
+	"github.com/goffee/goffee/web"
+	"github.com/goffee/goffee/web/controllers"
+	"github.com/goffee/goffee/writer"
 )
 
 var webMode bool

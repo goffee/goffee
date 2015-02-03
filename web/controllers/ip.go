@@ -5,8 +5,8 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/oschwald/geoip2-golang" // IP returnss the remote IP address and other info
-	"github.com/gophergala/goffee/web/render"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/oschwald/geoip2-golang" // IP returnss the remote IP address and other info
+	"github.com/goffee/goffee/web/render"
 )
 
 func IP(w http.ResponseWriter, req *http.Request) {

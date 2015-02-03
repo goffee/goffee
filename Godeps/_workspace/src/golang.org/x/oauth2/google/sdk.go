@@ -15,8 +15,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2/internal"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2/internal"
 )
 
 type sdkCredentials struct {

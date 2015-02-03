@@ -9,8 +9,8 @@ package google
 import (
 	"time"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/net/context"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/net/context"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
 	"google.golang.org/appengine"
 )
 

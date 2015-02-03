@@ -11,7 +11,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/net/context"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/net/context"
 )
 
 type mockTransport struct {

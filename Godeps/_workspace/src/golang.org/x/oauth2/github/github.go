@@ -6,7 +6,7 @@
 package github
 
 import (
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
 )
 
 // Endpoint is Github's OAuth 2.0 endpoint.

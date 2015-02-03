@@ -5,8 +5,8 @@
 package jwt_test
 
 import (
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2/jwt"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2/jwt"
 )
 
 func ExampleJWTConfig() {

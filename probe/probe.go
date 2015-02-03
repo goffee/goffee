@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/gophergala/goffee/data"
-	"github.com/gophergala/goffee/queue"
-	"github.com/gophergala/goffee/tor"
+	"github.com/goffee/goffee/data"
+	"github.com/goffee/goffee/queue"
+	"github.com/goffee/goffee/tor"
 )
 
 const ipReflector = "https://goffee.herokuapp.com/ip"
