@@ -4,16 +4,14 @@ import (
 	"flag"
 	"log"
 
-	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/gorilla/sessions"
-	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
-	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2/github"
+	"github.com/christopherobin/authy/martini"
+	"github.com/christopherobin/authy/provider"
 	"github.com/goffee/goffee/data"
 	"github.com/goffee/goffee/notifier"
 	"github.com/goffee/goffee/probe"
 	"github.com/goffee/goffee/queue"
 	"github.com/goffee/goffee/scheduler"
 	"github.com/goffee/goffee/web"
-	"github.com/goffee/goffee/web/controllers"
 	"github.com/goffee/goffee/writer"
 )
 
@@ -68,18 +66,24 @@ func init() {
 			log.Fatal("No GitHub clientid or secret set!")
 		}
 
-		controllers.OAuthConf = &oauth2.Config{
-			ClientID:     gitHubClientID,
-			ClientSecret: gitHubClientSecret,
-			Scopes:       []string{"user:email"},
-			Endpoint:     github.Endpoint,
+		web.AuthyConfig = authy.Config{
+			PathLogin: "/login",
+			BasePath:  "/oauth",
+			Callback:  "/callback",
+			Providers: map[string]provider.ProviderConfig{
+				"github": provider.ProviderConfig{
+					Key:    gitHubClientID,
+					Secret: gitHubClientSecret,
+					Scope:  []string{"user:email"},
+				},
+			},
 		}
 
 		if sessionSecret == "" {
 			log.Fatal("No session secret set!")
 		}
 
-		web.SessionStore = sessions.NewCookieStore([]byte(sessionSecret))
+		// web.SessionStore = sessions.NewCookieStore([]byte(sessionSecret))
 	}
 }
 
