@@ -3,8 +3,8 @@ package scheduler
 import (
 	"time"
 
-	"github.com/gophergala/goffee/data"
-	"github.com/gophergala/goffee/queue"
+	"github.com/goffee/goffee/data"
+	"github.com/goffee/goffee/queue"
 )
 
 var exit = make(chan bool)

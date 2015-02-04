@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/gophergala/goffee",
+	"ImportPath": "github.com/goffee/goffee",
 	"GoVersion": "go1.4",
 	"Packages": [
 		"./..."

@@ -2,7 +2,7 @@ package gorm_test
 
 import "testing"
 
-import "github.com/gophergala/goffee/Godeps/_workspace/src/github.com/jinzhu/gorm"
+import "github.com/goffee/goffee/Godeps/_workspace/src/github.com/jinzhu/gorm"
 
 type Cat struct {
 	Id   int

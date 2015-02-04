@@ -19,7 +19,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/google/go-querystring/query"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/google/go-querystring/query"
 )
 
 const (

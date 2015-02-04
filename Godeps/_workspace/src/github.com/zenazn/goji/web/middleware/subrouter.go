@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
 )
 
 type subrouter struct {

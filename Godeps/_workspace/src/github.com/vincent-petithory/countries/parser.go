@@ -15,7 +15,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/vincent-petithory/countries"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/vincent-petithory/countries"
 )
 
 func main() {

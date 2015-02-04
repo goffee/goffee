@@ -13,9 +13,9 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2/google"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2/jwt"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2/google"
+	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2/jwt"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/urlfetch"
 )

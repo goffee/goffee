@@ -6,7 +6,7 @@
 
 package google
 
-import "github.com/gophergala/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
+import "github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
 
 // AppEngineTokenSource returns a token source that fetches tokens
 // issued to the current App Engine application's service account.

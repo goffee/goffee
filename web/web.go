@@ -3,14 +3,14 @@ package web
 import (
 	"net/http"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/gorilla/sessions"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/hypebeast/gojistatic"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/justinas/nosurf"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/unrolled/secure"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/graceful"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web/middleware"
-	"github.com/gophergala/goffee/web/controllers"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/gorilla/sessions"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/hypebeast/gojistatic"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/justinas/nosurf"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/unrolled/secure"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/graceful"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web/middleware"
+	"github.com/goffee/goffee/web/controllers"
 )
 
 var SessionStore *sessions.CookieStore

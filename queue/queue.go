@@ -3,7 +3,7 @@ package queue
 import (
 	"time"
 
-	"github.com/gophergala/goffee/Godeps/_workspace/src/github.com/garyburd/redigo/redis"
+	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/garyburd/redigo/redis"
 )
 
 var (
