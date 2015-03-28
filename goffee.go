@@ -4,15 +4,16 @@ import (
 	"flag"
 	"log"
 
-	"github.com/christopherobin/authy/martini"
-	"github.com/christopherobin/authy/provider"
 	"github.com/goffee/goffee/data"
 	"github.com/goffee/goffee/notifier"
 	"github.com/goffee/goffee/probe"
 	"github.com/goffee/goffee/queue"
 	"github.com/goffee/goffee/scheduler"
 	"github.com/goffee/goffee/web"
+	"github.com/goffee/goffee/web/controllers"
 	"github.com/goffee/goffee/writer"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/github"
 )
 
 var webMode bool
@@ -66,17 +67,11 @@ func init() {
 			log.Fatal("No GitHub clientid or secret set!")
 		}
 
-		web.AuthyConfig = authy.Config{
-			PathLogin: "/login",
-			BasePath:  "/oauth",
-			Callback:  "/callback",
-			Providers: map[string]provider.ProviderConfig{
-				"github": provider.ProviderConfig{
-					Key:    gitHubClientID,
-					Secret: gitHubClientSecret,
-					Scope:  []string{"user:email"},
-				},
-			},
+		controllers.OAuthConf = &oauth2.Config{
+			ClientID:     gitHubClientID,
+			ClientSecret: gitHubClientSecret,
+			Scopes:       []string{"user:email"},
+			Endpoint:     github.Endpoint,
 		}
 
 		if sessionSecret == "" {

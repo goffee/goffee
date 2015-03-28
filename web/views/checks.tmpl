@@ -1,4 +1,3 @@
-{{{define "body"}}}
 <ol class="breadcrumb">
   <li><a href="/">Home</a></li>
   <li class="active">Checks</li>
@@ -13,6 +12,8 @@
 <p>
   <a class="btn btn-info" href="/checks/new" role="button">Add a new check</a>
 </p>
+
+{{{if .Checks }}}
 
 {{{range .Checks}}}
 

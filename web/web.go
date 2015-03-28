@@ -1,33 +1,25 @@
 package web
 
 import (
-	"github.com/christopherobin/authy/martini"
+	"time"
+
+	"html/template"
+
 	"github.com/go-martini/martini"
 	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/graceful"
 	"github.com/goffee/goffee/web/controllers"
+	"github.com/martini-contrib/csrf"
+	"github.com/martini-contrib/method"
 	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/secure"
 	"github.com/martini-contrib/sessions"
 )
 
 var SessionStore *sessions.CookieStore
-var AuthyConfig authy.Config
 
-// SessionMiddleware adds session support to Goffee
-// func SessionMiddleware(c *web.C, h http.Handler) http.Handler {
-// 	fn := func(w http.ResponseWriter, r *http.Request) {
-// 		// Get a session. We're ignoring the error resulted from decoding an
-// 		// existing session: Get() always returns a session, even if empty.
-// 		session, _ := SessionStore.Get(r, "goffee-session")
-//
-// 		// Save it.
-// 		session.Save(r, w)
-//
-// 		c.Env["Session"] = session
-//
-// 		h.ServeHTTP(w, r)
-// 	}
-// 	return http.HandlerFunc(fn)
-// }
+func formatTime(t time.Time) string {
+	return t.Format(time.RFC3339)
+}
 
 // StartServer starts the web server
 func StartServer(bind string) {
@@ -67,21 +59,50 @@ func StartServer(bind string) {
 	m.Use(martini.Static("web/public"))
 
 	store := sessions.NewCookieStore([]byte("secret123"))
-	m.Use(sessions.Sessions("authy", store))
+	m.Use(sessions.Sessions("goffee-session", store))
 
 	m.Use(render.Renderer(render.Options{
 		Directory: "web/views",
 		Delims:    render.Delims{"{{{", "}}}"},
 		Layout:    "layout",
+		Funcs: []template.FuncMap{
+			{
+				"formatTime": formatTime,
+			},
+		},
 	}))
 
-	m.Use(authy.Authy(AuthyConfig))
+	m.Use(method.Override())
 
-	m.Get("/callback", authy.LoginRequired(), controllers.Callback)
+	m.Use(secure.Secure(secure.Options{
+		AllowedHosts:            []string{"goffee.io"},
+		SSLRedirect:             false,
+		STSSeconds:              0, // STSSeconds is the max-age of the Strict-Transport-Security header. Default is 0, which would NOT include the header.
+		STSIncludeSubdomains:    false,
+		FrameDeny:               true,
+		CustomFrameOptionsValue: "SAMEORIGIN",
+		ContentTypeNosniff:      true,
+		BrowserXssFilter:        true,
+	}))
+
+	m.Use(csrf.Generate(&csrf.Options{
+		Secret:     "token123",
+		SessionKey: "UserId",
+	}))
 
 	m.Get("/", controllers.Home)
 	m.Get("/about", controllers.About)
 	m.Get("/ip", controllers.IP)
+
+	m.Get("/oauth/authorize", controllers.OAuthAuthorize)
+	m.Get("/oauth/callback", controllers.OAuthCallback)
+	m.Get("/sign_out", controllers.SignOut)
+
+	m.Get("/checks", controllers.ChecksIndex)
+	m.Get("/checks/new", controllers.NewCheck)
+	// m.Get("/checks/:id", controllers.ShowCheck)
+	// m.Post("/checks/:id/delete", controllers.DeleteCheck)
+	// m.Post("/checks", controllers.CreateCheck)
 
 	go m.RunOnAddr(bind)
 	// go graceful.ListenAndServe(bind, m)

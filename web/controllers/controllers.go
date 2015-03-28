@@ -26,7 +26,6 @@ import (
 
 // Home serves the home page
 func Home(s sessions.Session, r render.Render) {
-	s.Set("hello", "world")
 	r.HTML(200, "home", map[string]interface{}{})
 }
 

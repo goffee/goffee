@@ -3,21 +3,14 @@ package helpers
 import (
 	"errors"
 
-	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/gorilla/sessions"
-	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
 	"github.com/goffee/goffee/data"
+	"github.com/martini-contrib/sessions"
 )
 
-// CurrentSession returns the current session
-func CurrentSession(c web.C) *sessions.Session {
-	session := c.Env["Session"].(*sessions.Session)
-	return session
-}
-
 // CurrentUser returns the current user
-func CurrentUser(c web.C) (data.User, error) {
-	session := CurrentSession(c)
-	userID := session.Values["UserId"]
+func CurrentUser(session sessions.Session) (data.User, error) {
+	// session := CurrentSession(c)
+	userID := session.Get("UserId")
 
 	switch userID := userID.(type) {
 	case int64:
@@ -28,7 +21,7 @@ func CurrentUser(c web.C) (data.User, error) {
 }
 
 // UserSignedIn returns true if there is an authenticated user
-func UserSignedIn(c web.C) bool {
-	_, err := CurrentUser(c)
+func UserSignedIn(session sessions.Session) bool {
+	_, err := CurrentUser(session)
 	return err == nil
 }

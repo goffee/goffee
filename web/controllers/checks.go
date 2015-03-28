@@ -1,60 +1,49 @@
 package controllers
 
-// import (
-// 	"fmt"
-// 	"net/http"
-// 	"net/url"
-// 	"strconv"
-//
-// 	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/justinas/nosurf"
-// 	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web" // ChecksIndex render the checks index for the current user
-// 	"github.com/goffee/goffee/data"
-// 	"github.com/goffee/goffee/web/helpers"
-// 	"github.com/goffee/goffee/web/render"
-// )
-//
-// func ChecksIndex(c web.C, w http.ResponseWriter, req *http.Request) {
-// 	user, err := helpers.CurrentUser(c)
-//
-// 	if err != nil {
-// 		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
-// 		return
-// 	}
-//
-// 	checks, err := user.Checks()
-// 	if err != nil {
-// 		renderError(c, w, req, "Something went wrong", http.StatusInternalServerError)
-// 		return
-// 	}
-//
-// 	templates := render.GetBaseTemplates()
-// 	templates = append(templates, "web/views/checks.html")
-// 	err = render.Template(c, w, req, templates, "layout", map[string]interface{}{"Title": "Checks", "Checks": checks})
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 	}
-// }
-//
-// // NewCheck renders the new check form
-// func NewCheck(c web.C, w http.ResponseWriter, req *http.Request) {
-// 	user, err := helpers.CurrentUser(c)
-//
-// 	if err != nil {
-// 		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
-// 		return
-// 	}
-//
-// 	checksCount, err := user.ChecksCount()
-//
-// 	templates := render.GetBaseTemplates()
-// 	templates = append(templates, "web/views/new_check.html")
-// 	csrf := nosurf.Token(req)
-// 	err = render.Template(c, w, req, templates, "layout", map[string]interface{}{"Title": "New Check", "CSRFToken": csrf, "ChecksCount": checksCount})
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 	}
-// }
-//
+import (
+	"net/http"
+
+	// "github.com/goffee/goffee/Godeps/_workspace/src/github.com/justinas/nosurf"
+	// "github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web" // ChecksIndex render the checks index for the current user
+
+	"github.com/goffee/goffee/web/helpers"
+	"github.com/martini-contrib/csrf"
+	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/sessions"
+	// "github.com/goffee/goffee/web/render"
+)
+
+// ChecksIndex displays the user's checks
+func ChecksIndex(s sessions.Session, req *http.Request, r render.Render) {
+	user, err := helpers.CurrentUser(s)
+
+	if err != nil {
+		panic(err)
+	}
+
+	checks, err := user.Checks()
+	if err != nil {
+		panic(err)
+	}
+
+	r.HTML(200, "checks", map[string]interface{}{"Title": "Checks", "Checks": checks})
+}
+
+// NewCheck renders the new check form
+func NewCheck(s sessions.Session, req *http.Request, r render.Render, x csrf.CSRF) {
+	user, err := helpers.CurrentUser(s)
+
+	if err != nil {
+		panic(err)
+	}
+
+	checksCount, err := user.ChecksCount()
+
+	csrf := x.GetToken()
+
+	r.HTML(200, "new_check", map[string]interface{}{"Title": "New Check", "CSRFToken": csrf, "ChecksCount": checksCount})
+}
+
 // // CreateCheck saves a new check to the DB
 // func CreateCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 // 	user, err := helpers.CurrentUser(c)
