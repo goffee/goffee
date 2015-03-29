@@ -102,7 +102,7 @@ func StartServer(bind string) {
 	m.Get("/checks/new", controllers.NewCheck)
 	// m.Get("/checks/:id", controllers.ShowCheck)
 	// m.Post("/checks/:id/delete", controllers.DeleteCheck)
-	// m.Post("/checks", controllers.CreateCheck)
+	m.Post("/checks", csrf.Validate, controllers.CreateCheck)
 
 	go m.RunOnAddr(bind)
 	// go graceful.ListenAndServe(bind, m)

@@ -1,11 +1,14 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
+	"net/url"
 
 	// "github.com/goffee/goffee/Godeps/_workspace/src/github.com/justinas/nosurf"
 	// "github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web" // ChecksIndex render the checks index for the current user
 
+	"github.com/goffee/goffee/data"
 	"github.com/goffee/goffee/web/helpers"
 	"github.com/martini-contrib/csrf"
 	"github.com/martini-contrib/render"
@@ -44,43 +47,43 @@ func NewCheck(s sessions.Session, req *http.Request, r render.Render, x csrf.CSR
 	r.HTML(200, "new_check", map[string]interface{}{"Title": "New Check", "CSRFToken": csrf, "ChecksCount": checksCount})
 }
 
-// // CreateCheck saves a new check to the DB
-// func CreateCheck(c web.C, w http.ResponseWriter, req *http.Request) {
-// 	user, err := helpers.CurrentUser(c)
-//
-// 	if err != nil {
-// 		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
-// 		return
-// 	}
-//
-// 	checksCount, err := user.ChecksCount()
-// 	if err != nil {
-// 		renderError(c, w, req, "Something went wrong", http.StatusInternalServerError)
-// 		return
-// 	}
-//
-// 	if checksCount >= 5 {
-// 		session := helpers.CurrentSession(c)
-// 		session.AddFlash("You have too many checks in use, delete some to add more.")
-// 		session.Save(req, w)
-// 		http.Redirect(w, req, "/checks", http.StatusSeeOther)
-// 		return
-// 	}
-//
-// 	u, err := url.Parse(req.FormValue("url"))
-// 	if err != nil || u.Host == "" || (u.Scheme != "http" && u.Scheme != "https") {
-// 		http.Redirect(w, req, "/checks/new", http.StatusSeeOther)
-// 		return
-// 	}
-//
-// 	check := &data.Check{URL: u.String(), UserId: user.Id}
-// 	check.Create()
-//
-// 	path := fmt.Sprintf("/checks/%d", check.Id)
-//
-// 	http.Redirect(w, req, path, http.StatusSeeOther)
-// }
-//
+// CreateCheck saves a new check to the DB
+func CreateCheck(s sessions.Session, req *http.Request, r render.Render) {
+	user, err := helpers.CurrentUser(s)
+
+	if err != nil {
+		// renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
+		// return
+		panic(err)
+	}
+
+	checksCount, err := user.ChecksCount()
+	if err != nil {
+		// renderError(c, w, req, "Something went wrong", http.StatusInternalServerError)
+		// return
+		panic(err)
+	}
+
+	if checksCount >= 5 {
+		s.AddFlash("You have too many checks in use, delete some to add more.")
+		r.Redirect("/checks", http.StatusFound)
+		return
+	}
+
+	u, err := url.Parse(req.FormValue("url"))
+	if err != nil || u.Host == "" || (u.Scheme != "http" && u.Scheme != "https") {
+		r.Redirect("/checks", http.StatusFound)
+		return
+	}
+
+	check := &data.Check{URL: u.String(), UserId: user.Id}
+	check.Create()
+
+	path := fmt.Sprintf("/checks/%d", check.Id)
+
+	r.Redirect(path, http.StatusSeeOther)
+}
+
 // // ShowCheck renders a single check
 // func ShowCheck(c web.C, w http.ResponseWriter, req *http.Request) {
 // 	user, err := helpers.CurrentUser(c)
