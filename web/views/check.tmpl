@@ -1,0 +1,91 @@
+<ol class="breadcrumb">
+  <li><a href="/">Home</a></li>
+  <li><a href="/checks">Checks</a></li>
+  <li class="active">{{{.Check.URL}}}</li>
+</ol>
+
+<div class="checks-header">
+  <h1>Check details</h1>
+</div>
+
+<div class="row">
+  <div class="col-md-10">
+    <div id="latest-result-container" data-url="{{{.Check.URL}}}">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">
+            <span class="badge">…</span>
+            {{{.Check.URL}}}
+          </h3>
+        </div>
+        <div class="panel-body">
+          <p>
+            Loading…
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <form action="/checks/{{{.Check.Id}}}/delete" method="POST" id="delete-check-form">
+      <input type="hidden" name="_csrf" value="{{{ .CSRFToken }}}">
+      <button data-state="unarmed" type="submit" class="btn btn-danger">
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+        <span data-role="label">Destroy</span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<h2>Results</h2>
+
+<div id="results-container" data-uninitialized data-url="/checks/{{{.Check.Id}}}/results">No results yet</div>
+
+<script id="results-template" type="text/x-handlebars-template">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Timestamp</th>
+        <th>Status</th>
+        <th>Success?</th>
+        <th>Tested from</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each Results}}
+        <tr class="{{CSSclass}}">
+          <td><time datetime="{{CreatedAt}}">{{CreatedAt}}</time></td>
+          <td>{{Status}}</td>
+          <td>
+            <span class="glyphicon {{Icon}}">&nbsp;{{TextStatus}}</span>
+          </td>
+          <td>
+            <img class="flag" src="{{Flag}}" alt="{{CountryName}}">&nbsp;
+            <span class="country-name">{{CountryName}}</span>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</script>
+
+<script id="latest-result-template" type="text/x-handlebars-template">
+  <div class="panel {{PanelCSSclass}}">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        <span class="badge">
+          {{Status}}
+        </span>
+        {{URL}}
+        <a href="{{URL}}" aria-label="Open URL in new window" target="_blank">
+          <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
+        </a>
+      </h3>
+    </div>
+    <div class="panel-body">
+      <p>
+        Last checked <time data-role="timeago" datetime="{{CreatedAt}}">{{CreatedAt}}</time>.&nbsp;
+      </p>
+    </div>
+  </div>
+</script>

@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 
 	// "github.com/goffee/goffee/Godeps/_workspace/src/github.com/justinas/nosurf"
 	// "github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web" // ChecksIndex render the checks index for the current user
 
+	"github.com/go-martini/martini"
 	"github.com/goffee/goffee/data"
 	"github.com/goffee/goffee/web/helpers"
 	"github.com/martini-contrib/csrf"
@@ -84,64 +86,63 @@ func CreateCheck(s sessions.Session, req *http.Request, r render.Render) {
 	r.Redirect(path, http.StatusSeeOther)
 }
 
-// // ShowCheck renders a single check
-// func ShowCheck(c web.C, w http.ResponseWriter, req *http.Request) {
-// 	user, err := helpers.CurrentUser(c)
-//
-// 	if err != nil {
-// 		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
-// 		return
-// 	}
-//
-// 	checkId, err := strconv.ParseInt(c.URLParams["id"], 10, 64)
-// 	if err != nil {
-// 		renderError(c, w, req, "Check not found", http.StatusNotFound)
-// 		return
-// 	}
-//
-// 	check, err := user.Check(checkId)
-//
-// 	if err != nil {
-// 		renderError(c, w, req, "Check not found", http.StatusNotFound)
-// 		return
-// 	}
-//
-// 	csrf := nosurf.Token(req)
-//
-// 	templates := render.GetBaseTemplates()
-// 	templates = append(templates, "web/views/check.html")
-// 	err = render.Template(c, w, req, templates, "layout", map[string]interface{}{"Title": "Check: " + check.URL, "Check": check, "CSRFToken": csrf})
-// 	if err != nil {
-// 		http.Error(w, err.Error(), http.StatusInternalServerError)
-// 	}
-// }
-//
-// // DeleteCheck deletes a single check
-// func DeleteCheck(c web.C, w http.ResponseWriter, req *http.Request) {
-// 	user, err := helpers.CurrentUser(c)
-//
-// 	if err != nil {
-// 		renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
-// 		return
-// 	}
-//
-// 	checkId, err := strconv.ParseInt(c.URLParams["id"], 10, 64)
-// 	if err != nil {
-// 		renderError(c, w, req, "Check not found", http.StatusNotFound)
-// 		return
-// 	}
-//
-// 	check, err := user.Check(checkId)
-//
-// 	if err != nil {
-// 		renderError(c, w, req, "Check not found", http.StatusNotFound)
-// 		return
-// 	}
-//
-// 	check.Delete()
-// 	session := helpers.CurrentSession(c)
-// 	session.AddFlash("Check deleted")
-// 	session.Save(req, w)
-//
-// 	http.Redirect(w, req, "/checks", http.StatusSeeOther)
-// }
+// ShowCheck renders a single check
+func ShowCheck(s sessions.Session, req *http.Request, r render.Render, params martini.Params, x csrf.CSRF) {
+	user, err := helpers.CurrentUser(s)
+
+	if err != nil {
+		// renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
+		// return
+		panic(err)
+	}
+
+	checkID, err := strconv.ParseInt(params["id"], 10, 64)
+	if err != nil {
+		// renderError(c, w, req, "Check not found", http.StatusNotFound)
+		// return
+		panic(err)
+	}
+
+	check, err := user.Check(checkID)
+
+	if err != nil {
+		// renderError(c, w, req, "Check not found", http.StatusNotFound)
+		// return
+		panic(err)
+	}
+
+	csrf := x.GetToken()
+
+	r.HTML(200, "check", map[string]interface{}{"Title": "Check: " + check.URL, "Check": check, "CSRFToken": csrf})
+}
+
+// DeleteCheck deletes a single check
+func DeleteCheck(s sessions.Session, req *http.Request, r render.Render, params martini.Params) {
+	user, err := helpers.CurrentUser(s)
+
+	if err != nil {
+		// renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
+		// return
+		panic(err)
+	}
+
+	checkID, err := strconv.ParseInt(params["id"], 10, 64)
+	if err != nil {
+		// renderError(c, w, req, "Check not found", http.StatusNotFound)
+		// return
+		panic(err)
+	}
+
+	check, err := user.Check(checkID)
+
+	if err != nil {
+		// renderError(c, w, req, "Check not found", http.StatusNotFound)
+		// return
+		panic(err)
+	}
+
+	check.Delete()
+	s.AddFlash("Check deleted")
+
+	r.Redirect("/checks", http.StatusSeeOther)
+}

@@ -100,8 +100,8 @@ func StartServer(bind string) {
 
 	m.Get("/checks", controllers.ChecksIndex)
 	m.Get("/checks/new", controllers.NewCheck)
-	// m.Get("/checks/:id", controllers.ShowCheck)
-	// m.Post("/checks/:id/delete", controllers.DeleteCheck)
+	m.Get("/checks/:id", controllers.ShowCheck)
+	m.Post("/checks/:id/delete", csrf.Validate, controllers.DeleteCheck)
 	m.Post("/checks", csrf.Validate, controllers.CreateCheck)
 
 	go m.RunOnAddr(bind)
