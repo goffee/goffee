@@ -8,6 +8,7 @@ import (
 	"github.com/go-martini/martini"
 	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/graceful"
 	"github.com/goffee/goffee/web/controllers"
+	"github.com/goffee/goffee/web/middleware"
 	"github.com/martini-contrib/csrf"
 	"github.com/martini-contrib/method"
 	"github.com/martini-contrib/render"
@@ -92,7 +93,7 @@ func StartServer(bind string) {
 
 	m.Get("/", controllers.Home)
 	m.Get("/about", controllers.About)
-	m.Get("/ip", controllers.IP)
+	m.Get("/ip", middleware.RealIP(), controllers.IP)
 
 	m.Get("/oauth/authorize", controllers.OAuthAuthorize)
 	m.Get("/oauth/callback", controllers.OAuthCallback)
