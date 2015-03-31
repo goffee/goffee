@@ -1,13 +1,16 @@
 package web
 
 import (
+	"errors"
 	"time"
 
 	"html/template"
 
 	"github.com/go-martini/martini"
 	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/graceful"
+	"github.com/goffee/goffee/data"
 	"github.com/goffee/goffee/web/controllers"
+	"github.com/goffee/goffee/web/helpers"
 	"github.com/goffee/goffee/web/middleware"
 	"github.com/martini-contrib/csrf"
 	"github.com/martini-contrib/method"
@@ -20,6 +23,37 @@ var SessionStore *sessions.CookieStore
 
 func formatTime(t time.Time) string {
 	return t.Format(time.RFC3339)
+}
+
+var templateFuncs = template.FuncMap{
+	"formatTime": func(t time.Time) string {
+		return t.Format(time.RFC3339)
+	},
+	// define an empty stub first, otherwise html/template will complain with "missing function"
+	"currentUser": func() (data.User, error) {
+		return data.User{}, errors.New("User not found")
+	},
+	"userSignedIn": func() bool {
+		return false
+	},
+}
+
+// middleware to inject the route
+func helperFuncs() martini.Handler {
+	return func(ren render.Render, s sessions.Session) {
+		ren.Template().Funcs(injectHelperFuncs(s))
+	}
+}
+
+// create the real template helpers
+var injectHelperFuncs = func(s sessions.Session) template.FuncMap {
+	templateFuncs["currentUser"] = func() (data.User, error) {
+		return helpers.CurrentUser(s)
+	}
+	templateFuncs["userSignedIn"] = func() bool {
+		return helpers.UserSignedIn(s)
+	}
+	return templateFuncs
 }
 
 // StartServer starts the web server
@@ -66,12 +100,9 @@ func StartServer(bind string) {
 		Directory: "web/views",
 		Delims:    render.Delims{"{{{", "}}}"},
 		Layout:    "layout",
-		Funcs: []template.FuncMap{
-			{
-				"formatTime": formatTime,
-			},
-		},
+		Funcs:     []template.FuncMap{templateFuncs},
 	}))
+	m.Use(helperFuncs())
 
 	m.Use(method.Override())
 

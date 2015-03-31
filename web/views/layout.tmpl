@@ -35,13 +35,13 @@
         <ul class="nav navbar-nav">
           <li><a href="/">Home</a></li>
           <li><a href="/about">About</a></li>
-          {{{if .UserSignedIn }}}
+          {{{if userSignedIn }}}
             <li><a href="/checks">Checks</a></li>
           {{{end}}}
         </ul>
-        {{{if .UserSignedIn }}}
+        {{{if userSignedIn }}}
           <p class="navbar-text navbar-right">
-            Signed in as {{{.CurrentUser.GitHubLogin}}}. <a href="/sign_out" class="navbar-link">Sign out</a>
+            Signed in as {{{currentUser.GitHubLogin}}}. <a href="/sign_out" class="navbar-link">Sign out</a>
           </p>
         {{{else}}}
           <ul class="nav navbar-nav navbar-right">
