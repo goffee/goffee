@@ -58,37 +58,6 @@ var injectHelperFuncs = func(s sessions.Session) template.FuncMap {
 
 // StartServer starts the web server
 func StartServer(bind string) {
-	// secureMiddleware := secure.New(secure.Options{
-	// 	AllowedHosts:       []string{"example.com", "ssl.example.com"},
-	// 	FrameDeny:          true,
-	// 	ContentTypeNosniff: true,
-	// 	BrowserXssFilter:   true,
-	// 	IsDevelopment:      true,
-	// })
-	//
-	// m := web.New()
-	//
-	// m.Use(middleware.RealIP)
-	// m.Use(gojistatic.Static("web/public", gojistatic.StaticOptions{SkipLogging: true}))
-	// m.Use(middleware.EnvInit)
-	// m.Use(secureMiddleware.Handler)
-	// m.Use(SessionMiddleware)
-	// m.Use(nosurf.NewPure)
-	//
-	// m.Get("/oauth/authorize", controllers.OAuthAuthorize)
-	// m.Get("/oauth/callback", controllers.OAuthCallback)
-	// m.Get("/sign_out", controllers.SignOut)
-	//
-	// m.Get("/checks", controllers.ChecksIndex)
-	// m.Get("/checks/new", controllers.NewCheck)
-	// m.Get("/checks/:id", controllers.ShowCheck)
-	// m.Post("/checks/:id/delete", controllers.DeleteCheck)
-	// m.Post("/checks", controllers.CreateCheck)
-	//
-	// m.Get("/checks/:check_id/results", controllers.ResultsIndex)
-	//
-	// m.NotFound(controllers.NotFound)
-
 	m := martini.Classic()
 
 	m.Use(martini.Static("web/public"))
