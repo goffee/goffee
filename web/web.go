@@ -136,6 +136,8 @@ func StartServer(bind string) {
 	m.Post("/checks/:id/delete", csrf.Validate, controllers.DeleteCheck)
 	m.Post("/checks", csrf.Validate, controllers.CreateCheck)
 
+	m.Get("/checks/:check_id/results", controllers.ResultsIndex)
+
 	m.NotFound(controllers.NotFound)
 
 	go m.RunOnAddr(bind)

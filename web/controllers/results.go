@@ -1,41 +1,39 @@
 package controllers
 
-// import (
-// 	"net/http"
-// 	"strconv"
-//
-// 	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web" // ResultsIndex renders results JSON
-// 	"github.com/goffee/goffee/web/helpers"
-// 	"github.com/goffee/goffee/web/render"
-// )
-//
-// func ResultsIndex(c web.C, w http.ResponseWriter, req *http.Request) {
-// 	user, err := helpers.CurrentUser(c)
-//
-// 	if err != nil {
-// 		renderError(c, w, req,"You need to re-authenticate", http.StatusUnauthorized)
-// 		return
-// 	}
-//
-// 	checkId, err := strconv.ParseInt(c.URLParams["check_id"], 10, 64)
-// 	if err != nil {
-// 		renderError(c, w, req,"Check not found", http.StatusNotFound)
-// 		return
-// 	}
-//
-// 	check, err := user.Check(checkId)
-//
-// 	if err != nil {
-// 		renderError(c, w, req,"Check not found", http.StatusNotFound)
-// 		return
-// 	}
-//
-// 	results, err := check.Results()
-//
-// 	if err != nil {
-// 		renderError(c, w, req,"No results found", http.StatusNotFound)
-// 		return
-// 	}
-//
-// 	render.JSON(w, http.StatusOK, results)
-// }
+import (
+	"net/http"
+	"strconv"
+
+	"github.com/go-martini/martini"
+	"github.com/goffee/goffee/web/helpers"
+	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/sessions"
+)
+
+// ResultsIndex returns the results for a check as JSON
+func ResultsIndex(s sessions.Session, req *http.Request, r render.Render, params martini.Params) {
+	user, err := helpers.CurrentUser(s)
+
+	if err != nil {
+		panic(err)
+	}
+
+	checkID, err := strconv.ParseInt(params["check_id"], 10, 64)
+	if err != nil {
+		panic(err)
+	}
+
+	check, err := user.Check(checkID)
+
+	if err != nil {
+		panic(err)
+	}
+
+	results, err := check.Results()
+
+	if err != nil {
+		panic(err)
+	}
+
+	r.JSON(200, results)
+}
