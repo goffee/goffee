@@ -15,7 +15,8 @@ func ResultsIndex(s sessions.Session, req *http.Request, r render.Render, params
 	user, err := helpers.CurrentUser(s)
 
 	if err != nil {
-		panic(err)
+		r.Redirect("/", http.StatusFound)
+		return
 	}
 
 	checkID, err := strconv.ParseInt(params["check_id"], 10, 64)

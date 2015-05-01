@@ -22,8 +22,8 @@ import (
 	"github.com/martini-contrib/sessions"
 )
 
-// SessionStore ...
-var SessionStore *sessions.CookieStore
+// SessionSecret ...
+var SessionSecret string
 
 func formatTime(t time.Time) string {
 	return t.Format(time.RFC3339)
@@ -75,7 +75,7 @@ func StartServer(bind string) {
 
 	m.Use(martini.Static("web/public"))
 
-	store := sessions.NewCookieStore([]byte("secret123"))
+	store := sessions.NewCookieStore([]byte(SessionSecret))
 	m.Use(sessions.Sessions("goffee-session", store))
 
 	m.Use(render.Renderer(render.Options{
@@ -100,7 +100,7 @@ func StartServer(bind string) {
 	}))
 
 	m.Use(csrf.Generate(&csrf.Options{
-		Secret:     "token123",
+		Secret:     SessionSecret,
 		SessionKey: "UserId",
 		ErrorFunc: func(w http.ResponseWriter) {
 			body, err := ioutil.ReadFile("web/public/422.html")

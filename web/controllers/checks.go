@@ -6,16 +6,12 @@ import (
 	"net/url"
 	"strconv"
 
-	// "github.com/goffee/goffee/Godeps/_workspace/src/github.com/justinas/nosurf"
-	// "github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web" // ChecksIndex render the checks index for the current user
-
 	"github.com/go-martini/martini"
 	"github.com/goffee/goffee/data"
 	"github.com/goffee/goffee/web/helpers"
 	"github.com/martini-contrib/csrf"
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/sessions"
-	// "github.com/goffee/goffee/web/render"
 )
 
 // ChecksIndex displays the user's checks
@@ -23,7 +19,8 @@ func ChecksIndex(s sessions.Session, req *http.Request, r render.Render) {
 	user, err := helpers.CurrentUser(s)
 
 	if err != nil {
-		panic(err)
+		r.Redirect("/", http.StatusFound)
+		return
 	}
 
 	checks, err := user.Checks()
@@ -39,7 +36,8 @@ func NewCheck(s sessions.Session, req *http.Request, r render.Render, x csrf.CSR
 	user, err := helpers.CurrentUser(s)
 
 	if err != nil {
-		panic(err)
+		r.Redirect("/", http.StatusFound)
+		return
 	}
 
 	checksCount, err := user.ChecksCount()
@@ -54,15 +52,12 @@ func CreateCheck(s sessions.Session, req *http.Request, r render.Render) {
 	user, err := helpers.CurrentUser(s)
 
 	if err != nil {
-		// renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
-		// return
-		panic(err)
+		r.Redirect("/", http.StatusFound)
+		return
 	}
 
 	checksCount, err := user.ChecksCount()
 	if err != nil {
-		// renderError(c, w, req, "Something went wrong", http.StatusInternalServerError)
-		// return
 		panic(err)
 	}
 
@@ -91,23 +86,18 @@ func ShowCheck(s sessions.Session, req *http.Request, r render.Render, params ma
 	user, err := helpers.CurrentUser(s)
 
 	if err != nil {
-		// renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
-		// return
-		panic(err)
+		r.Redirect("/", http.StatusFound)
+		return
 	}
 
 	checkID, err := strconv.ParseInt(params["id"], 10, 64)
 	if err != nil {
-		// renderError(c, w, req, "Check not found", http.StatusNotFound)
-		// return
 		panic(err)
 	}
 
 	check, err := user.Check(checkID)
 
 	if err != nil {
-		// renderError(c, w, req, "Check not found", http.StatusNotFound)
-		// return
 		panic(err)
 	}
 
@@ -121,23 +111,18 @@ func DeleteCheck(s sessions.Session, req *http.Request, r render.Render, params 
 	user, err := helpers.CurrentUser(s)
 
 	if err != nil {
-		// renderError(c, w, req, "You need to re-authenticate", http.StatusUnauthorized)
-		// return
-		panic(err)
+		r.Redirect("/", http.StatusFound)
+		return
 	}
 
 	checkID, err := strconv.ParseInt(params["id"], 10, 64)
 	if err != nil {
-		// renderError(c, w, req, "Check not found", http.StatusNotFound)
-		// return
 		panic(err)
 	}
 
 	check, err := user.Check(checkID)
 
 	if err != nil {
-		// renderError(c, w, req, "Check not found", http.StatusNotFound)
-		// return
 		panic(err)
 	}
 

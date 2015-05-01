@@ -78,7 +78,7 @@ func init() {
 			log.Fatal("No session secret set!")
 		}
 
-		// web.SessionStore = sessions.NewCookieStore([]byte(sessionSecret))
+		web.SessionSecret = sessionSecret
 	}
 }
 
