@@ -58,7 +58,16 @@ var injectHelperFuncs = func(s sessions.Session) template.FuncMap {
 
 // StartServer starts the web server
 func StartServer(bind string) {
-	m := martini.Classic()
+	// Equivalent to:
+	// m := martini.Classic()
+	r := martini.NewRouter()
+	ma := martini.New()
+	ma.Use(martini.Logger())
+	ma.Use(middleware.Recovery())
+	ma.Use(martini.Static("public"))
+	ma.MapTo(r, (*martini.Routes)(nil))
+	ma.Action(r.Handle)
+	m := &martini.ClassicMartini{ma, r}
 
 	m.Use(martini.Static("web/public"))
 
@@ -76,7 +85,7 @@ func StartServer(bind string) {
 	m.Use(method.Override())
 
 	m.Use(secure.Secure(secure.Options{
-		AllowedHosts:            []string{"goffee.io"},
+		AllowedHosts:            []string{"www.goffee.io", "goffee.io", "localhost:8000", "localhost"},
 		SSLRedirect:             false,
 		STSSeconds:              0, // STSSeconds is the max-age of the Strict-Transport-Security header. Default is 0, which would NOT include the header.
 		STSIncludeSubdomains:    false,
