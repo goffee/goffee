@@ -2,6 +2,9 @@ package web
 
 import (
 	"errors"
+	"fmt"
+	"io/ioutil"
+	"net/http"
 	"time"
 
 	"html/template"
@@ -19,6 +22,7 @@ import (
 	"github.com/martini-contrib/sessions"
 )
 
+// SessionStore ...
 var SessionStore *sessions.CookieStore
 
 func formatTime(t time.Time) string {
@@ -98,6 +102,16 @@ func StartServer(bind string) {
 	m.Use(csrf.Generate(&csrf.Options{
 		Secret:     "token123",
 		SessionKey: "UserId",
+		ErrorFunc: func(w http.ResponseWriter) {
+			body, err := ioutil.ReadFile("web/public/422.html")
+			if err != nil {
+				panic(err)
+			}
+
+			w.Header().Set("Content-Type", "text/html; charset=utf-8")
+			w.WriteHeader(422)
+			fmt.Fprint(w, string(body))
+		},
 	}))
 
 	m.Get("/", controllers.Home)
