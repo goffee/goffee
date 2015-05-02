@@ -135,10 +135,14 @@ func StartServer(bind string) {
 	m.NotFound(controllers.NotFound)
 
 	srv = &graceful.Server{
-		Timeout: 60 * time.Second,
-		Server:  &http.Server{Addr: bind, Handler: m},
+		Server:           &http.Server{Addr: bind, Handler: m},
+		NoSignalHandling: true,
 	}
 	go srv.ListenAndServe()
+}
+
+func Stop() {
+	srv.Stop(10 * time.Second)
 }
 
 // Wait ...

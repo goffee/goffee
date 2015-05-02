@@ -17,15 +17,15 @@ func InitQueue(redisServer string) {
 	pool = newPool(redisServer)
 }
 
-func FetchBatch() (result []string) {
+func FetchBatch() <-chan []string {
 	return listFetch("jobs")
 }
 
-func FetchResults() (results []string) {
+func FetchResults() <-chan []string {
 	return listFetch("results")
 }
 
-func FetchNotifications() (results []string) {
+func FetchNotifications() <-chan []string {
 	return listFetch("notifications")
 }
 
@@ -81,20 +81,28 @@ func AddNotification(notification string) {
 	listWrite("notifications", notification)
 }
 
-func listFetch(listName string) (results []string) {
-	c := pool.Get()
-	defer c.Close()
+func listFetch(listName string) <-chan []string {
+	out := make(chan []string)
 
-	for i := 0; i < batchSize; i++ {
-		reply, err := redis.Values(c.Do("BRPOP", listName, timeout))
-		if err != nil {
-			break
+	go func() {
+		c := pool.Get()
+		defer c.Close()
+
+		results := []string{}
+
+		for i := 0; i < batchSize; i++ {
+			reply, err := redis.Values(c.Do("BRPOP", listName, timeout))
+			if err != nil {
+				break
+			}
+			item := string(reply[1].([]byte))
+			results = append(results, item)
 		}
-		item := string(reply[1].([]byte))
-		results = append(results, item)
-	}
 
-	return results
+		out <- results
+	}()
+
+	return out
 }
 
 func newPool(server string) *redis.Pool {

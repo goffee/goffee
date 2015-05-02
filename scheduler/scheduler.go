@@ -7,7 +7,10 @@ import (
 	"github.com/goffee/goffee/queue"
 )
 
-var exit = make(chan bool)
+var (
+	stop = make(chan bool)
+	exit = make(chan bool)
+)
 
 func Run() {
 	go run()
@@ -16,8 +19,13 @@ func Run() {
 func run() {
 	scheduleChecks()
 
-	for range time.Tick(15 * time.Second) {
-		scheduleChecks()
+	for {
+		select {
+		case <-time.Tick(15 * time.Second):
+			scheduleChecks()
+		case <-stop:
+			exit <- true
+		}
 	}
 }
 
@@ -32,6 +40,10 @@ func scheduleChecks() {
 		}
 	}
 	queue.ReleaseSchedulerLock()
+}
+
+func Stop() {
+	stop <- true
 }
 
 func Wait() {

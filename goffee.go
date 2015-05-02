@@ -3,6 +3,9 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/goffee/goffee/data"
 	"github.com/goffee/goffee/notifier"
@@ -112,19 +115,28 @@ func main() {
 		notifier.Run()
 	}
 
-	if webMode {
-		web.Wait()
-	}
-	if writerMode {
-		writer.Wait()
-	}
+	interrupt := make(chan os.Signal)
+	signal.Notify(interrupt, syscall.SIGINT, syscall.SIGTERM)
+	<-interrupt
+
 	if schedulerMode {
+		scheduler.Stop()
 		scheduler.Wait()
 	}
 	if probeMode {
+		probe.Stop()
 		probe.Wait()
 	}
+	if writerMode {
+		writer.Stop()
+		writer.Wait()
+	}
 	if notifierMode {
+		notifier.Stop()
 		notifier.Wait()
+	}
+	if webMode {
+		web.Stop()
+		web.Wait()
 	}
 }
