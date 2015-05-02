@@ -10,7 +10,6 @@ import (
 	"html/template"
 
 	"github.com/go-martini/martini"
-	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/graceful"
 	"github.com/goffee/goffee/data"
 	"github.com/goffee/goffee/web/controllers"
 	"github.com/goffee/goffee/web/helpers"
@@ -20,7 +19,10 @@ import (
 	"github.com/martini-contrib/render"
 	"github.com/martini-contrib/secure"
 	"github.com/martini-contrib/sessions"
+	"github.com/tylerb/graceful"
 )
+
+var srv *graceful.Server
 
 // SessionSecret ...
 var SessionSecret string
@@ -132,11 +134,14 @@ func StartServer(bind string) {
 
 	m.NotFound(controllers.NotFound)
 
-	go m.RunOnAddr(bind)
-	// go graceful.ListenAndServe(bind, m)
+	srv = &graceful.Server{
+		Timeout: 60 * time.Second,
+		Server:  &http.Server{Addr: bind, Handler: m},
+	}
+	go srv.ListenAndServe()
 }
 
 // Wait ...
 func Wait() {
-	graceful.Wait()
+	<-srv.StopChan()
 }
