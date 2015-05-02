@@ -3,51 +3,45 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/google/go-github/github"
-	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/gorilla/sessions"
-	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web"
-	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
 	"github.com/goffee/goffee/data"
-	"github.com/goffee/goffee/web/helpers"
+	"github.com/google/go-github/github"
+	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/sessions"
+	"golang.org/x/oauth2"
 )
 
+// OAuthConf is used to configure OAuth
 var OAuthConf *oauth2.Config
 
 // OAuthAuthorize makes the user login
-func OAuthAuthorize(w http.ResponseWriter, req *http.Request) {
+func OAuthAuthorize(s sessions.Session, req *http.Request, r render.Render) {
 	url := OAuthConf.AuthCodeURL("state", oauth2.AccessTypeOnline)
-	http.Redirect(w, req, url, http.StatusFound)
+	r.Redirect(url, http.StatusFound)
 }
 
 // SignOut makes the user sign out
-func SignOut(c web.C, w http.ResponseWriter, req *http.Request) {
-	session := helpers.CurrentSession(c)
-	session.Values = map[interface{}]interface{}{}
-	session.Save(req, w)
-	http.Redirect(w, req, "/", http.StatusFound)
+func SignOut(s sessions.Session, req *http.Request, r render.Render) {
+	s.Clear()
+	r.Redirect("/", http.StatusFound)
 }
 
 // OAuthCallback handles the callback from GitHub
-func OAuthCallback(c web.C, w http.ResponseWriter, req *http.Request) {
+func OAuthCallback(s sessions.Session, req *http.Request, r render.Render) {
 	// Get the code from the response
-	code := req.FormValue("code")
+	code := req.URL.Query().Get("code")
 
 	// Exchange the received code for a token
 	token, err := OAuthConf.Exchange(oauth2.NoContext, code)
 	if err != nil {
-		renderError(c, w, req, "Authentication failed", http.StatusUnauthorized)
-		return
+		panic(err)
 	}
-
-	session := c.Env["Session"].(*sessions.Session)
 
 	httpClient := OAuthConf.Client(oauth2.NoContext, token)
 	githubClient := github.NewClient(httpClient)
 	user, _, err := githubClient.Users.Get("")
 
 	if err != nil {
-		renderError(c, w, req, "Authentication failed", http.StatusUnauthorized)
-		return
+		panic(err)
 	}
 
 	u := &data.User{
@@ -68,8 +62,7 @@ func OAuthCallback(c web.C, w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	session.Values["UserId"] = u.Id
-	session.Save(req, w)
+	s.Set("UserId", u.Id)
 
-	http.Redirect(w, req, "/checks", http.StatusFound)
+	r.Redirect("/checks", http.StatusFound)
 }

@@ -6,10 +6,10 @@ import (
 	"net/http"
 
 	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/oschwald/geoip2-golang" // IP returnss the remote IP address and other info
-	"github.com/goffee/goffee/web/render"
+	"github.com/martini-contrib/render"
 )
 
-func IP(w http.ResponseWriter, req *http.Request) {
+func IP(res http.ResponseWriter, req *http.Request, r render.Render) {
 	db, err := geoip2.Open("geoip/GeoLite2-Country.mmdb")
 	if err != nil {
 		log.Fatal(err)
@@ -39,5 +39,5 @@ func IP(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	render.JSON(w, http.StatusOK, responseJSON)
+	r.JSON(http.StatusOK, responseJSON)
 }

@@ -11,6 +11,7 @@ import (
 )
 
 var (
+	stop           = make(chan bool)
 	exit           = make(chan bool)
 	MandrillKey    string
 	mandrillClient *mandrill.Client
@@ -24,21 +25,25 @@ func run() {
 	mandrillClient = mandrill.ClientWithKey(MandrillKey)
 
 	for {
-		notifications := queue.FetchNotifications()
-		for _, n := range notifications {
-			checkId, err := strconv.ParseInt(n, 10, 64)
+		select {
+		case <-stop:
+			exit <- true
+		case notifications := <-queue.FetchNotifications():
+			for _, n := range notifications {
+				checkId, err := strconv.ParseInt(n, 10, 64)
 
-			check, err := data.FindCheck(checkId)
-			if err != nil {
-				continue
+				check, err := data.FindCheck(checkId)
+				if err != nil {
+					continue
+				}
+
+				user, err := check.User()
+				if err != nil {
+					continue
+				}
+
+				sendMessage(check, user)
 			}
-
-			user, err := check.User()
-			if err != nil {
-				continue
-			}
-
-			sendMessage(check, user)
 		}
 	}
 }
@@ -73,6 +78,10 @@ func sendMessage(c data.Check, u data.User) {
 	message.Subaccount = "goffee"
 
 	mandrillClient.MessagesSend(message)
+}
+
+func Stop() {
+	stop <- true
 }
 
 func Wait() {

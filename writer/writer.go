@@ -8,6 +8,7 @@ import (
 	"github.com/goffee/goffee/queue"
 )
 
+var stop = make(chan bool)
 var exit = make(chan bool)
 
 func Run() {
@@ -16,29 +17,37 @@ func Run() {
 
 func run() {
 	for {
-		results := queue.FetchResults()
-		for _, r := range results {
-			var result data.Result
-			err := json.Unmarshal([]byte(r), &result)
+		select {
+		case <-stop:
+			exit <- true
+		case results := <-queue.FetchResults():
+			for _, r := range results {
+				var result data.Result
+				err := json.Unmarshal([]byte(r), &result)
 
-			checks, err := data.ChecksByURL(result.URL)
-			if err != nil {
-				continue
-			}
+				checks, err := data.ChecksByURL(result.URL)
+				if err != nil {
+					continue
+				}
 
-			for _, check := range checks {
-				previousSuccess := check.Success
+				for _, check := range checks {
+					previousSuccess := check.Success
 
-				check.AddResult(&result)
+					check.AddResult(&result)
 
-				if previousSuccess && !result.Success {
-					queue.AddNotification(strconv.FormatInt(check.Id, 10))
-				} else if !previousSuccess && result.Success {
-					queue.AddNotification(strconv.FormatInt(check.Id, 10))
+					if previousSuccess && !result.Success {
+						queue.AddNotification(strconv.FormatInt(check.Id, 10))
+					} else if !previousSuccess && result.Success {
+						queue.AddNotification(strconv.FormatInt(check.Id, 10))
+					}
 				}
 			}
 		}
 	}
+}
+
+func Stop() {
+	stop <- true
 }
 
 func Wait() {

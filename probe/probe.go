@@ -22,6 +22,7 @@ type IPResponse struct {
 }
 
 var (
+	stop           = make(chan bool)
 	exit           = make(chan bool)
 	lastIPChange   time.Time
 	currentIP      string
@@ -36,17 +37,21 @@ func run() {
 	var wg sync.WaitGroup
 	newip()
 
-	for { // ever
-		batch := queue.FetchBatch()
-		for _, item := range batch {
-			wg.Add(1)
-			go check(item, &wg)
-		}
+	for {
+		select {
+		case <-stop:
+			exit <- true
+		case batch := <-queue.FetchBatch():
+			for _, item := range batch {
+				wg.Add(1)
+				go check(item, &wg)
+			}
 
-		wg.Wait()
+			wg.Wait()
 
-		if time.Since(lastIPChange) > ipRefreshInterval {
-			newip()
+			if time.Since(lastIPChange) > ipRefreshInterval {
+				newip()
+			}
 		}
 	}
 }
@@ -106,6 +111,10 @@ func check(address string, wg *sync.WaitGroup) {
 	}
 
 	queue.WriteResult(string(data))
+}
+
+func Stop() {
+	stop <- true
 }
 
 func Wait() {

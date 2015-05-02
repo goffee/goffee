@@ -4,38 +4,37 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/zenazn/goji/web" // ResultsIndex renders results JSON
+	"github.com/go-martini/martini"
 	"github.com/goffee/goffee/web/helpers"
-	"github.com/goffee/goffee/web/render"
+	"github.com/martini-contrib/render"
+	"github.com/martini-contrib/sessions"
 )
 
-func ResultsIndex(c web.C, w http.ResponseWriter, req *http.Request) {
-	user, err := helpers.CurrentUser(c)
+// ResultsIndex returns the results for a check as JSON
+func ResultsIndex(s sessions.Session, req *http.Request, r render.Render, params martini.Params) {
+	user, err := helpers.CurrentUser(s)
 
 	if err != nil {
-		renderError(c, w, req,"You need to re-authenticate", http.StatusUnauthorized)
+		r.Redirect("/", http.StatusFound)
 		return
 	}
 
-	checkId, err := strconv.ParseInt(c.URLParams["check_id"], 10, 64)
+	checkID, err := strconv.ParseInt(params["check_id"], 10, 64)
 	if err != nil {
-		renderError(c, w, req,"Check not found", http.StatusNotFound)
-		return
+		panic(err)
 	}
 
-	check, err := user.Check(checkId)
+	check, err := user.Check(checkID)
 
 	if err != nil {
-		renderError(c, w, req,"Check not found", http.StatusNotFound)
-		return
+		panic(err)
 	}
 
 	results, err := check.Results()
 
 	if err != nil {
-		renderError(c, w, req,"No results found", http.StatusNotFound)
-		return
+		panic(err)
 	}
 
-	render.JSON(w, http.StatusOK, results)
+	r.JSON(200, results)
 }

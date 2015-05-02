@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
-	"github.com/goffee/goffee/Godeps/_workspace/src/github.com/gorilla/sessions"
-	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2"
-	"github.com/goffee/goffee/Godeps/_workspace/src/golang.org/x/oauth2/github"
 	"github.com/goffee/goffee/data"
 	"github.com/goffee/goffee/notifier"
 	"github.com/goffee/goffee/probe"
@@ -15,6 +15,8 @@ import (
 	"github.com/goffee/goffee/web"
 	"github.com/goffee/goffee/web/controllers"
 	"github.com/goffee/goffee/writer"
+	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/github"
 )
 
 var webMode bool
@@ -79,7 +81,7 @@ func init() {
 			log.Fatal("No session secret set!")
 		}
 
-		web.SessionStore = sessions.NewCookieStore([]byte(sessionSecret))
+		web.SessionSecret = sessionSecret
 	}
 }
 
@@ -113,19 +115,28 @@ func main() {
 		notifier.Run()
 	}
 
-	if webMode {
-		web.Wait()
-	}
-	if writerMode {
-		writer.Wait()
-	}
+	interrupt := make(chan os.Signal)
+	signal.Notify(interrupt, syscall.SIGINT, syscall.SIGTERM)
+	<-interrupt
+
 	if schedulerMode {
+		scheduler.Stop()
 		scheduler.Wait()
 	}
 	if probeMode {
+		probe.Stop()
 		probe.Wait()
 	}
+	if writerMode {
+		writer.Stop()
+		writer.Wait()
+	}
 	if notifierMode {
+		notifier.Stop()
 		notifier.Wait()
+	}
+	if webMode {
+		web.Stop()
+		web.Wait()
 	}
 }

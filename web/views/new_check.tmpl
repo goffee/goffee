@@ -1,4 +1,3 @@
-{{{define "body"}}}
 <ol class="breadcrumb">
   <li><a href="/">Home</a></li>
   <li><a href="/checks">Checks</a></li>
@@ -22,7 +21,7 @@
     {{{end}}}
 
     <form action="/checks" method="POST" id="check-form">
-      <input type="hidden" name="csrf_token" value="{{{ .CSRFToken }}}">
+      <input type="hidden" name="_csrf" value="{{{ .CSRFToken }}}">
       <div class="form-group">
         <label class="control-label" for="url">URL</label>
         <input type="url" class="form-control" id="url" name="url" placeholder="Enter URL" required>
@@ -31,4 +30,3 @@
     </form>
   </div>
 </div>
-{{{end}}}
