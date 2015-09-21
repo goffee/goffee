@@ -38,7 +38,7 @@ func run() {
 				continue
 			}
 
-			sendMessage(check, user)
+			// sendMessage(check, user)
 		}
 	}
 }
