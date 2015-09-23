@@ -33,7 +33,7 @@ func run() {
 				continue
 			}
 
-			user, err := check.User()
+			_, err = check.User()
 			if err != nil {
 				continue
 			}
